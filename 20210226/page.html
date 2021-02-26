@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        #r1:hover {
+            fill: green
+        }
+    </style>
+</head>
+
+<body>
+
+    <svg width="800" height="800" xmlns="http://www.w3.org/2000/svg">
+            <rect id="r1" x="0" y="0" width="500" height="120" fill="#ffd34e" />
+            <rect x="0" y="120" width="500" height="120" fill="#00000e" />
+            <ellipse id="c1" cx="258" cy="120" rx="80" ry="81" stroke="#95f9ff" fill="none" stroke-width="22" stroke-dasharray="200"
+                stroke-dashoffset="250" />
+            <ellipse cx="250" cy="120" rx="80" ry="80" stroke="#c1430e" fill="none" stroke-width="20" />
+            <ellipse cx="350" cy="200" rx="20" ry="20" fill="#ffd34e" />
+            <ellipse id="c2" cx="140" cy="50" rx="25" ry="25" fill="#00000e" />
+            <text x="250" y="260" text-anchor="middle" font-size="25">MCR flag
+            </text>
+        </svg>
+    <script>
+        const c1 = document.getElementById('c1')
+
+        function getRandomIntInclusive(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        c1.addEventListener('click', () => {
+            let number = getRandomIntInclusive(1, 100);
+            console.log(number);
+            c1.setAttribute('stroke-dasharray', number)
+        })
+    </script>
+</body>
+
+</html>
