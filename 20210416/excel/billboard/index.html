@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://unpkg.com/billboard.js@3.0.2/dist/billboard.min.css" />
+    <script src="https://unpkg.com/billboard.js@3.0.2/dist/billboard.pkgd.min.js"></script>
+  </head>
+  <body>
+    <div id="graph"></div>
+    <script>
+
+arret = [
+  { Arret: 'Estavayer-le-Lac', Trafic: 1300 },
+  { Arret: 'Fribourg/Freiburg', Trafic: 20100 },
+  { Arret: 'Kerzers', Trafic: 4200 },
+  { Arret: 'Murten/Morat', Trafic: 1900 },
+  { Arret: 'Romont', Trafic: 2400 },
+  { Arret: 'Vauderens', Trafic: '<50' }
+]
+
+
+
+// bb.generate({
+//   bindto: "#graph",
+//   data: {
+//     type: "bar",
+//     columns: [
+//       ["data1", 30, 200, 100, 170, 150, 250],
+//       ["data2", 130, 100, 140, 35, 110, 50]
+//     ]
+//   }
+// })
+
+
+bb.generate({
+bindto: "#graph",
+  data: {
+    json: {
+      Trafic: arret.map(({ Trafic }) => Trafic),
+    },
+    type: 'bar',
+  },
+  axis: {
+    x: {
+      type: 'category',
+      categories: arret.map(({ Arret }) => Arret),
+    }
+  },
+  color: {
+    pattern: ['tomato'],
+  },
+})
+    </script>
+  </body>
+</html>
+
+
+
