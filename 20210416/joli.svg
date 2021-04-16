@@ -1,0 +1,28 @@
+<svg width="800" height="800" xmlns="http://www.w3.org/2000/svg">
+
+    <pattern id="lfpam" patternUnits="userSpaceOnUse" width="20" height="20">
+        <path d="M 0,15 l 20,-10 M 0,5 l 20,-10 M 0,25 l 20,-10" stroke-width="2" shape-rendering="auto" stroke="darkorange" stroke-linecap="square">
+        </path>
+    </pattern>
+
+    <pattern id="zjkti" patternUnits="userSpaceOnUse" width="20" height="20"><path d="M 0 5 l 5 0 l 0 -5 M 15 20 l 0 -5 l 5 0 M 5 10 l 0 5 l 5 0 M 10 5 l 5 0 l 0 5" fill="transparent" stroke="#343434" stroke-width="1" stroke-linecap="square" shape-rendering="crispEdges"></path></pattern>
+
+    <defs>
+        <!-- Déclaration du filtre -->
+        <filter id="pictureFilter" >
+            <feMorphology operator="erode" radius="6" />
+        </filter>
+    </defs>
+
+
+    <rect x="0" y="0" width="500" height="120" fill="url(#lfpam)" />
+    <rect x="0" y="120" width="500" height="120" fill="url(#zjkti)" />
+    <g  filter="url(#pictureFilter)">  
+    <ellipse cx="258" cy="120" rx="80" ry="81" stroke="#95f9ff" fill="none" stroke-width="22" stroke-dasharray="200"
+        stroke-dashoffset="250" />
+    <ellipse cx="250" cy="120" rx="80" ry="80" stroke="#c1430e" fill="none" stroke-width="20" />
+    <ellipse cx="350" cy="200" rx="20" ry="20" fill="#ffd34e" />
+    <ellipse  cx="140" cy="50" rx="25" ry="25" fill="#00000e" />
+    </g>
+</svg>
+
