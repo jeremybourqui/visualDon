@@ -1,4 +1,4 @@
-const csvFilePath='data.csv'
+const csvFilePath='2019.csv'
 const csv=require('csvtojson')
 csv()
 .fromFile(csvFilePath)
@@ -11,3 +11,5 @@ csv()
      * ]
      */ 
 })
+
+// node .\preparer.js > data.json
