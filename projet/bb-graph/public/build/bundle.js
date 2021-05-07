@@ -1015,7 +1015,7 @@
     return new Selection$1(subgroups, this._parents);
   }
 
-  function array(x) {
+  function array$1(x) {
     return typeof x === "object" && "length" in x
       ? x // Array, TypedArray, NodeList, array-like
       : Array.from(x); // Map, Set, iterable, string, or anything else
@@ -1034,7 +1034,7 @@
   function arrayAll(select) {
     return function() {
       var group = select.apply(this, arguments);
-      return group == null ? [] : array(group);
+      return group == null ? [] : array$1(group);
     };
   }
 
@@ -1138,7 +1138,7 @@
     querySelectorAll: function(selector) { return this._parent.querySelectorAll(selector); }
   };
 
-  function constant$2(x) {
+  function constant$3(x) {
     return function() {
       return x;
     };
@@ -1225,13 +1225,13 @@
         parents = this._parents,
         groups = this._groups;
 
-    if (typeof value !== "function") value = constant$2(value);
+    if (typeof value !== "function") value = constant$3(value);
 
     for (var m = groups.length, update = new Array(m), enter = new Array(m), exit = new Array(m), j = 0; j < m; ++j) {
       var parent = parents[j],
           group = groups[j],
           groupLength = group.length,
-          data = array(value.call(parent, parent && parent.__data__, j, parents)),
+          data = array$1(value.call(parent, parent && parent.__data__, j, parents)),
           dataLength = data.length,
           enterGroup = enter[j] = new Array(dataLength),
           updateGroup = update[j] = new Array(dataLength),
@@ -1882,7 +1882,7 @@
   function selectAll(selector) {
     return typeof selector === "string"
         ? new Selection$1([document.querySelectorAll(selector)], [document.documentElement])
-        : new Selection$1([selector == null ? [] : array(selector)], root);
+        : new Selection$1([selector == null ? [] : array$1(selector)], root);
   }
 
   var noop$1 = {value: () => {}};
@@ -2003,7 +2003,7 @@
     }
   }
 
-  var constant$1 = x => () => x;
+  var constant$2 = x => () => x;
 
   function DragEvent(type, {
     sourceEvent,
@@ -2193,19 +2193,19 @@
     }
 
     drag.filter = function(_) {
-      return arguments.length ? (filter = typeof _ === "function" ? _ : constant$1(!!_), drag) : filter;
+      return arguments.length ? (filter = typeof _ === "function" ? _ : constant$2(!!_), drag) : filter;
     };
 
     drag.container = function(_) {
-      return arguments.length ? (container = typeof _ === "function" ? _ : constant$1(_), drag) : container;
+      return arguments.length ? (container = typeof _ === "function" ? _ : constant$2(_), drag) : container;
     };
 
     drag.subject = function(_) {
-      return arguments.length ? (subject = typeof _ === "function" ? _ : constant$1(_), drag) : subject;
+      return arguments.length ? (subject = typeof _ === "function" ? _ : constant$2(_), drag) : subject;
     };
 
     drag.touchable = function(_) {
-      return arguments.length ? (touchable = typeof _ === "function" ? _ : constant$1(!!_), drag) : touchable;
+      return arguments.length ? (touchable = typeof _ === "function" ? _ : constant$2(!!_), drag) : touchable;
     };
 
     drag.on = function() {
@@ -2601,7 +2601,7 @@
         : m1) * 255;
   }
 
-  var constant = x => () => x;
+  var constant$1 = x => () => x;
 
   function linear$2(a, d) {
     return function(t) {
@@ -2617,13 +2617,13 @@
 
   function gamma(y) {
     return (y = +y) === 1 ? nogamma : function(a, b) {
-      return b - a ? exponential(a, b, y) : constant(isNaN(a) ? b : a);
+      return b - a ? exponential(a, b, y) : constant$1(isNaN(a) ? b : a);
     };
   }
 
   function nogamma(a, b) {
     var d = b - a;
-    return d ? linear$2(a, d) : constant(isNaN(a) ? b : a);
+    return d ? linear$2(a, d) : constant$1(isNaN(a) ? b : a);
   }
 
   var interpolateRgb = (function rgbGamma(y) {
@@ -2779,7 +2779,7 @@
 
   function interpolate$1(a, b) {
     var t = typeof b, c;
-    return b == null || t === "boolean" ? constant(b)
+    return b == null || t === "boolean" ? constant$1(b)
         : (t === "number" ? interpolateNumber
         : t === "string" ? ((c = color$2(b)) ? (b = c, interpolateRgb) : interpolateString)
         : b instanceof color$2 ? interpolateRgb
@@ -2798,7 +2798,7 @@
 
   var degrees = 180 / Math.PI;
 
-  var identity$3 = {
+  var identity$4 = {
     translateX: 0,
     translateY: 0,
     rotate: 0,
@@ -2828,14 +2828,14 @@
   /* eslint-disable no-undef */
   function parseCss(value) {
     const m = new (typeof DOMMatrix === "function" ? DOMMatrix : WebKitCSSMatrix)(value + "");
-    return m.isIdentity ? identity$3 : decompose(m.a, m.b, m.c, m.d, m.e, m.f);
+    return m.isIdentity ? identity$4 : decompose(m.a, m.b, m.c, m.d, m.e, m.f);
   }
 
   function parseSvg(value) {
-    if (value == null) return identity$3;
+    if (value == null) return identity$4;
     if (!svgNode) svgNode = document.createElementNS("http://www.w3.org/2000/svg", "g");
     svgNode.setAttribute("transform", value);
-    if (!(value = svgNode.transform.baseVal.consolidate())) return identity$3;
+    if (!(value = svgNode.transform.baseVal.consolidate())) return identity$4;
     value = value.matrix;
     return decompose(value.a, value.b, value.c, value.d, value.e, value.f);
   }
@@ -4251,7 +4251,7 @@
 
   var unit = [0, 1];
 
-  function identity$2(x) {
+  function identity$3(x) {
     return x;
   }
 
@@ -4315,14 +4315,14 @@
         transform,
         untransform,
         unknown,
-        clamp = identity$2,
+        clamp = identity$3,
         piecewise,
         output,
         input;
 
     function rescale() {
       var n = Math.min(domain.length, range.length);
-      if (clamp !== identity$2) clamp = clamper(domain[0], domain[n - 1]);
+      if (clamp !== identity$3) clamp = clamper(domain[0], domain[n - 1]);
       piecewise = n > 2 ? polymap : bimap;
       output = input = null;
       return scale;
@@ -4349,7 +4349,7 @@
     };
 
     scale.clamp = function(_) {
-      return arguments.length ? (clamp = _ ? true : identity$2, rescale()) : clamp !== identity$2;
+      return arguments.length ? (clamp = _ ? true : identity$3, rescale()) : clamp !== identity$3;
     };
 
     scale.interpolate = function(_) {
@@ -4367,7 +4367,7 @@
   }
 
   function continuous() {
-    return transformer()(identity$2, identity$2);
+    return transformer()(identity$3, identity$3);
   }
 
   function formatDecimal(x) {
@@ -4523,7 +4523,7 @@
     "x": (x) => Math.round(x).toString(16)
   };
 
-  function identity$1(x) {
+  function identity$2(x) {
     return x;
   }
 
@@ -4531,11 +4531,11 @@
       prefixes = ["y","z","a","f","p","n","µ","m","","k","M","G","T","P","E","Z","Y"];
 
   function formatLocale(locale) {
-    var group = locale.grouping === undefined || locale.thousands === undefined ? identity$1 : formatGroup(map.call(locale.grouping, Number), locale.thousands + ""),
+    var group = locale.grouping === undefined || locale.thousands === undefined ? identity$2 : formatGroup(map.call(locale.grouping, Number), locale.thousands + ""),
         currencyPrefix = locale.currency === undefined ? "" : locale.currency[0] + "",
         currencySuffix = locale.currency === undefined ? "" : locale.currency[1] + "",
         decimal = locale.decimal === undefined ? "." : locale.decimal + "",
-        numerals = locale.numerals === undefined ? identity$1 : formatNumerals(map.call(locale.numerals, String)),
+        numerals = locale.numerals === undefined ? identity$2 : formatNumerals(map.call(locale.numerals, String)),
         percent = locale.percent === undefined ? "%" : locale.percent + "",
         minus = locale.minus === undefined ? "−" : locale.minus + "",
         nan = locale.nan === undefined ? "NaN" : locale.nan + "";
@@ -5112,7 +5112,425 @@
     return initRange.apply(calendar(year, month, sunday, day, hour, minute, second, millisecond, timeFormat).domain([new Date(2000, 0, 1), new Date(2000, 0, 2)]), arguments);
   }
 
+  const pi$1 = Math.PI,
+      tau$1 = 2 * pi$1,
+      epsilon$2 = 1e-6,
+      tauEpsilon = tau$1 - epsilon$2;
+
+  function Path() {
+    this._x0 = this._y0 = // start of current subpath
+    this._x1 = this._y1 = null; // end of current subpath
+    this._ = "";
+  }
+
+  function path() {
+    return new Path;
+  }
+
+  Path.prototype = path.prototype = {
+    constructor: Path,
+    moveTo: function(x, y) {
+      this._ += "M" + (this._x0 = this._x1 = +x) + "," + (this._y0 = this._y1 = +y);
+    },
+    closePath: function() {
+      if (this._x1 !== null) {
+        this._x1 = this._x0, this._y1 = this._y0;
+        this._ += "Z";
+      }
+    },
+    lineTo: function(x, y) {
+      this._ += "L" + (this._x1 = +x) + "," + (this._y1 = +y);
+    },
+    quadraticCurveTo: function(x1, y1, x, y) {
+      this._ += "Q" + (+x1) + "," + (+y1) + "," + (this._x1 = +x) + "," + (this._y1 = +y);
+    },
+    bezierCurveTo: function(x1, y1, x2, y2, x, y) {
+      this._ += "C" + (+x1) + "," + (+y1) + "," + (+x2) + "," + (+y2) + "," + (this._x1 = +x) + "," + (this._y1 = +y);
+    },
+    arcTo: function(x1, y1, x2, y2, r) {
+      x1 = +x1, y1 = +y1, x2 = +x2, y2 = +y2, r = +r;
+      var x0 = this._x1,
+          y0 = this._y1,
+          x21 = x2 - x1,
+          y21 = y2 - y1,
+          x01 = x0 - x1,
+          y01 = y0 - y1,
+          l01_2 = x01 * x01 + y01 * y01;
+
+      // Is the radius negative? Error.
+      if (r < 0) throw new Error("negative radius: " + r);
+
+      // Is this path empty? Move to (x1,y1).
+      if (this._x1 === null) {
+        this._ += "M" + (this._x1 = x1) + "," + (this._y1 = y1);
+      }
+
+      // Or, is (x1,y1) coincident with (x0,y0)? Do nothing.
+      else if (!(l01_2 > epsilon$2));
+
+      // Or, are (x0,y0), (x1,y1) and (x2,y2) collinear?
+      // Equivalently, is (x1,y1) coincident with (x2,y2)?
+      // Or, is the radius zero? Line to (x1,y1).
+      else if (!(Math.abs(y01 * x21 - y21 * x01) > epsilon$2) || !r) {
+        this._ += "L" + (this._x1 = x1) + "," + (this._y1 = y1);
+      }
+
+      // Otherwise, draw an arc!
+      else {
+        var x20 = x2 - x0,
+            y20 = y2 - y0,
+            l21_2 = x21 * x21 + y21 * y21,
+            l20_2 = x20 * x20 + y20 * y20,
+            l21 = Math.sqrt(l21_2),
+            l01 = Math.sqrt(l01_2),
+            l = r * Math.tan((pi$1 - Math.acos((l21_2 + l01_2 - l20_2) / (2 * l21 * l01))) / 2),
+            t01 = l / l01,
+            t21 = l / l21;
+
+        // If the start tangent is not coincident with (x0,y0), line to.
+        if (Math.abs(t01 - 1) > epsilon$2) {
+          this._ += "L" + (x1 + t01 * x01) + "," + (y1 + t01 * y01);
+        }
+
+        this._ += "A" + r + "," + r + ",0,0," + (+(y01 * x20 > x01 * y20)) + "," + (this._x1 = x1 + t21 * x21) + "," + (this._y1 = y1 + t21 * y21);
+      }
+    },
+    arc: function(x, y, r, a0, a1, ccw) {
+      x = +x, y = +y, r = +r, ccw = !!ccw;
+      var dx = r * Math.cos(a0),
+          dy = r * Math.sin(a0),
+          x0 = x + dx,
+          y0 = y + dy,
+          cw = 1 ^ ccw,
+          da = ccw ? a0 - a1 : a1 - a0;
+
+      // Is the radius negative? Error.
+      if (r < 0) throw new Error("negative radius: " + r);
+
+      // Is this path empty? Move to (x0,y0).
+      if (this._x1 === null) {
+        this._ += "M" + x0 + "," + y0;
+      }
+
+      // Or, is (x0,y0) not coincident with the previous point? Line to (x0,y0).
+      else if (Math.abs(this._x1 - x0) > epsilon$2 || Math.abs(this._y1 - y0) > epsilon$2) {
+        this._ += "L" + x0 + "," + y0;
+      }
+
+      // Is this arc empty? We’re done.
+      if (!r) return;
+
+      // Does the angle go the wrong way? Flip the direction.
+      if (da < 0) da = da % tau$1 + tau$1;
+
+      // Is this a complete circle? Draw two arcs to complete the circle.
+      if (da > tauEpsilon) {
+        this._ += "A" + r + "," + r + ",0,1," + cw + "," + (x - dx) + "," + (y - dy) + "A" + r + "," + r + ",0,1," + cw + "," + (this._x1 = x0) + "," + (this._y1 = y0);
+      }
+
+      // Is this arc non-empty? Draw an arc!
+      else if (da > epsilon$2) {
+        this._ += "A" + r + "," + r + ",0," + (+(da >= pi$1)) + "," + cw + "," + (this._x1 = x + r * Math.cos(a1)) + "," + (this._y1 = y + r * Math.sin(a1));
+      }
+    },
+    rect: function(x, y, w, h) {
+      this._ += "M" + (this._x0 = this._x1 = +x) + "," + (this._y0 = this._y1 = +y) + "h" + (+w) + "v" + (+h) + "h" + (-w) + "Z";
+    },
+    toString: function() {
+      return this._;
+    }
+  };
+
+  function constant(x) {
+    return function constant() {
+      return x;
+    };
+  }
+
+  var abs = Math.abs;
+  var atan2 = Math.atan2;
+  var cos = Math.cos;
+  var max = Math.max;
+  var min = Math.min;
+  var sin = Math.sin;
+  var sqrt = Math.sqrt;
+
   var epsilon$1 = 1e-12;
+  var pi = Math.PI;
+  var halfPi = pi / 2;
+  var tau = 2 * pi;
+
+  function acos(x) {
+    return x > 1 ? 0 : x < -1 ? pi : Math.acos(x);
+  }
+
+  function asin(x) {
+    return x >= 1 ? halfPi : x <= -1 ? -halfPi : Math.asin(x);
+  }
+
+  function arcInnerRadius(d) {
+    return d.innerRadius;
+  }
+
+  function arcOuterRadius(d) {
+    return d.outerRadius;
+  }
+
+  function arcStartAngle(d) {
+    return d.startAngle;
+  }
+
+  function arcEndAngle(d) {
+    return d.endAngle;
+  }
+
+  function arcPadAngle(d) {
+    return d && d.padAngle; // Note: optional!
+  }
+
+  function intersect(x0, y0, x1, y1, x2, y2, x3, y3) {
+    var x10 = x1 - x0, y10 = y1 - y0,
+        x32 = x3 - x2, y32 = y3 - y2,
+        t = y32 * x10 - x32 * y10;
+    if (t * t < epsilon$1) return;
+    t = (x32 * (y0 - y2) - y32 * (x0 - x2)) / t;
+    return [x0 + t * x10, y0 + t * y10];
+  }
+
+  // Compute perpendicular offset line of length rc.
+  // http://mathworld.wolfram.com/Circle-LineIntersection.html
+  function cornerTangents(x0, y0, x1, y1, r1, rc, cw) {
+    var x01 = x0 - x1,
+        y01 = y0 - y1,
+        lo = (cw ? rc : -rc) / sqrt(x01 * x01 + y01 * y01),
+        ox = lo * y01,
+        oy = -lo * x01,
+        x11 = x0 + ox,
+        y11 = y0 + oy,
+        x10 = x1 + ox,
+        y10 = y1 + oy,
+        x00 = (x11 + x10) / 2,
+        y00 = (y11 + y10) / 2,
+        dx = x10 - x11,
+        dy = y10 - y11,
+        d2 = dx * dx + dy * dy,
+        r = r1 - rc,
+        D = x11 * y10 - x10 * y11,
+        d = (dy < 0 ? -1 : 1) * sqrt(max(0, r * r * d2 - D * D)),
+        cx0 = (D * dy - dx * d) / d2,
+        cy0 = (-D * dx - dy * d) / d2,
+        cx1 = (D * dy + dx * d) / d2,
+        cy1 = (-D * dx + dy * d) / d2,
+        dx0 = cx0 - x00,
+        dy0 = cy0 - y00,
+        dx1 = cx1 - x00,
+        dy1 = cy1 - y00;
+
+    // Pick the closer of the two intersection points.
+    // TODO Is there a faster way to determine which intersection to use?
+    if (dx0 * dx0 + dy0 * dy0 > dx1 * dx1 + dy1 * dy1) cx0 = cx1, cy0 = cy1;
+
+    return {
+      cx: cx0,
+      cy: cy0,
+      x01: -ox,
+      y01: -oy,
+      x11: cx0 * (r1 / r - 1),
+      y11: cy0 * (r1 / r - 1)
+    };
+  }
+
+  function arc() {
+    var innerRadius = arcInnerRadius,
+        outerRadius = arcOuterRadius,
+        cornerRadius = constant(0),
+        padRadius = null,
+        startAngle = arcStartAngle,
+        endAngle = arcEndAngle,
+        padAngle = arcPadAngle,
+        context = null;
+
+    function arc() {
+      var buffer,
+          r,
+          r0 = +innerRadius.apply(this, arguments),
+          r1 = +outerRadius.apply(this, arguments),
+          a0 = startAngle.apply(this, arguments) - halfPi,
+          a1 = endAngle.apply(this, arguments) - halfPi,
+          da = abs(a1 - a0),
+          cw = a1 > a0;
+
+      if (!context) context = buffer = path();
+
+      // Ensure that the outer radius is always larger than the inner radius.
+      if (r1 < r0) r = r1, r1 = r0, r0 = r;
+
+      // Is it a point?
+      if (!(r1 > epsilon$1)) context.moveTo(0, 0);
+
+      // Or is it a circle or annulus?
+      else if (da > tau - epsilon$1) {
+        context.moveTo(r1 * cos(a0), r1 * sin(a0));
+        context.arc(0, 0, r1, a0, a1, !cw);
+        if (r0 > epsilon$1) {
+          context.moveTo(r0 * cos(a1), r0 * sin(a1));
+          context.arc(0, 0, r0, a1, a0, cw);
+        }
+      }
+
+      // Or is it a circular or annular sector?
+      else {
+        var a01 = a0,
+            a11 = a1,
+            a00 = a0,
+            a10 = a1,
+            da0 = da,
+            da1 = da,
+            ap = padAngle.apply(this, arguments) / 2,
+            rp = (ap > epsilon$1) && (padRadius ? +padRadius.apply(this, arguments) : sqrt(r0 * r0 + r1 * r1)),
+            rc = min(abs(r1 - r0) / 2, +cornerRadius.apply(this, arguments)),
+            rc0 = rc,
+            rc1 = rc,
+            t0,
+            t1;
+
+        // Apply padding? Note that since r1 ≥ r0, da1 ≥ da0.
+        if (rp > epsilon$1) {
+          var p0 = asin(rp / r0 * sin(ap)),
+              p1 = asin(rp / r1 * sin(ap));
+          if ((da0 -= p0 * 2) > epsilon$1) p0 *= (cw ? 1 : -1), a00 += p0, a10 -= p0;
+          else da0 = 0, a00 = a10 = (a0 + a1) / 2;
+          if ((da1 -= p1 * 2) > epsilon$1) p1 *= (cw ? 1 : -1), a01 += p1, a11 -= p1;
+          else da1 = 0, a01 = a11 = (a0 + a1) / 2;
+        }
+
+        var x01 = r1 * cos(a01),
+            y01 = r1 * sin(a01),
+            x10 = r0 * cos(a10),
+            y10 = r0 * sin(a10);
+
+        // Apply rounded corners?
+        if (rc > epsilon$1) {
+          var x11 = r1 * cos(a11),
+              y11 = r1 * sin(a11),
+              x00 = r0 * cos(a00),
+              y00 = r0 * sin(a00),
+              oc;
+
+          // Restrict the corner radius according to the sector angle.
+          if (da < pi && (oc = intersect(x01, y01, x00, y00, x11, y11, x10, y10))) {
+            var ax = x01 - oc[0],
+                ay = y01 - oc[1],
+                bx = x11 - oc[0],
+                by = y11 - oc[1],
+                kc = 1 / sin(acos((ax * bx + ay * by) / (sqrt(ax * ax + ay * ay) * sqrt(bx * bx + by * by))) / 2),
+                lc = sqrt(oc[0] * oc[0] + oc[1] * oc[1]);
+            rc0 = min(rc, (r0 - lc) / (kc - 1));
+            rc1 = min(rc, (r1 - lc) / (kc + 1));
+          }
+        }
+
+        // Is the sector collapsed to a line?
+        if (!(da1 > epsilon$1)) context.moveTo(x01, y01);
+
+        // Does the sector’s outer ring have rounded corners?
+        else if (rc1 > epsilon$1) {
+          t0 = cornerTangents(x00, y00, x01, y01, r1, rc1, cw);
+          t1 = cornerTangents(x11, y11, x10, y10, r1, rc1, cw);
+
+          context.moveTo(t0.cx + t0.x01, t0.cy + t0.y01);
+
+          // Have the corners merged?
+          if (rc1 < rc) context.arc(t0.cx, t0.cy, rc1, atan2(t0.y01, t0.x01), atan2(t1.y01, t1.x01), !cw);
+
+          // Otherwise, draw the two corners and the ring.
+          else {
+            context.arc(t0.cx, t0.cy, rc1, atan2(t0.y01, t0.x01), atan2(t0.y11, t0.x11), !cw);
+            context.arc(0, 0, r1, atan2(t0.cy + t0.y11, t0.cx + t0.x11), atan2(t1.cy + t1.y11, t1.cx + t1.x11), !cw);
+            context.arc(t1.cx, t1.cy, rc1, atan2(t1.y11, t1.x11), atan2(t1.y01, t1.x01), !cw);
+          }
+        }
+
+        // Or is the outer ring just a circular arc?
+        else context.moveTo(x01, y01), context.arc(0, 0, r1, a01, a11, !cw);
+
+        // Is there no inner ring, and it’s a circular sector?
+        // Or perhaps it’s an annular sector collapsed due to padding?
+        if (!(r0 > epsilon$1) || !(da0 > epsilon$1)) context.lineTo(x10, y10);
+
+        // Does the sector’s inner ring (or point) have rounded corners?
+        else if (rc0 > epsilon$1) {
+          t0 = cornerTangents(x10, y10, x11, y11, r0, -rc0, cw);
+          t1 = cornerTangents(x01, y01, x00, y00, r0, -rc0, cw);
+
+          context.lineTo(t0.cx + t0.x01, t0.cy + t0.y01);
+
+          // Have the corners merged?
+          if (rc0 < rc) context.arc(t0.cx, t0.cy, rc0, atan2(t0.y01, t0.x01), atan2(t1.y01, t1.x01), !cw);
+
+          // Otherwise, draw the two corners and the ring.
+          else {
+            context.arc(t0.cx, t0.cy, rc0, atan2(t0.y01, t0.x01), atan2(t0.y11, t0.x11), !cw);
+            context.arc(0, 0, r0, atan2(t0.cy + t0.y11, t0.cx + t0.x11), atan2(t1.cy + t1.y11, t1.cx + t1.x11), cw);
+            context.arc(t1.cx, t1.cy, rc0, atan2(t1.y11, t1.x11), atan2(t1.y01, t1.x01), !cw);
+          }
+        }
+
+        // Or is the inner ring just a circular arc?
+        else context.arc(0, 0, r0, a10, a00, cw);
+      }
+
+      context.closePath();
+
+      if (buffer) return context = null, buffer + "" || null;
+    }
+
+    arc.centroid = function() {
+      var r = (+innerRadius.apply(this, arguments) + +outerRadius.apply(this, arguments)) / 2,
+          a = (+startAngle.apply(this, arguments) + +endAngle.apply(this, arguments)) / 2 - pi / 2;
+      return [cos(a) * r, sin(a) * r];
+    };
+
+    arc.innerRadius = function(_) {
+      return arguments.length ? (innerRadius = typeof _ === "function" ? _ : constant(+_), arc) : innerRadius;
+    };
+
+    arc.outerRadius = function(_) {
+      return arguments.length ? (outerRadius = typeof _ === "function" ? _ : constant(+_), arc) : outerRadius;
+    };
+
+    arc.cornerRadius = function(_) {
+      return arguments.length ? (cornerRadius = typeof _ === "function" ? _ : constant(+_), arc) : cornerRadius;
+    };
+
+    arc.padRadius = function(_) {
+      return arguments.length ? (padRadius = _ == null ? null : typeof _ === "function" ? _ : constant(+_), arc) : padRadius;
+    };
+
+    arc.startAngle = function(_) {
+      return arguments.length ? (startAngle = typeof _ === "function" ? _ : constant(+_), arc) : startAngle;
+    };
+
+    arc.endAngle = function(_) {
+      return arguments.length ? (endAngle = typeof _ === "function" ? _ : constant(+_), arc) : endAngle;
+    };
+
+    arc.padAngle = function(_) {
+      return arguments.length ? (padAngle = typeof _ === "function" ? _ : constant(+_), arc) : padAngle;
+    };
+
+    arc.context = function(_) {
+      return arguments.length ? ((context = _ == null ? null : _), arc) : context;
+    };
+
+    return arc;
+  }
+
+  function array(x) {
+    return typeof x === "object" && "length" in x
+      ? x // Array, TypedArray, NodeList, array-like
+      : Array.from(x); // Map, Set, iterable, string, or anything else
+  }
 
   function Linear(context) {
     this._context = context;
@@ -5144,6 +5562,89 @@
 
   function curveLinear(context) {
     return new Linear(context);
+  }
+
+  function descending(a, b) {
+    return b < a ? -1 : b > a ? 1 : b >= a ? 0 : NaN;
+  }
+
+  function identity$1(d) {
+    return d;
+  }
+
+  function pie$1() {
+    var value = identity$1,
+        sortValues = descending,
+        sort = null,
+        startAngle = constant(0),
+        endAngle = constant(tau),
+        padAngle = constant(0);
+
+    function pie(data) {
+      var i,
+          n = (data = array(data)).length,
+          j,
+          k,
+          sum = 0,
+          index = new Array(n),
+          arcs = new Array(n),
+          a0 = +startAngle.apply(this, arguments),
+          da = Math.min(tau, Math.max(-tau, endAngle.apply(this, arguments) - a0)),
+          a1,
+          p = Math.min(Math.abs(da) / n, padAngle.apply(this, arguments)),
+          pa = p * (da < 0 ? -1 : 1),
+          v;
+
+      for (i = 0; i < n; ++i) {
+        if ((v = arcs[index[i] = i] = +value(data[i], i, data)) > 0) {
+          sum += v;
+        }
+      }
+
+      // Optionally sort the arcs by previously-computed values or by data.
+      if (sortValues != null) index.sort(function(i, j) { return sortValues(arcs[i], arcs[j]); });
+      else if (sort != null) index.sort(function(i, j) { return sort(data[i], data[j]); });
+
+      // Compute the arcs! They are stored in the original data's order.
+      for (i = 0, k = sum ? (da - n * pa) / sum : 0; i < n; ++i, a0 = a1) {
+        j = index[i], v = arcs[j], a1 = a0 + (v > 0 ? v * k : 0) + pa, arcs[j] = {
+          data: data[j],
+          index: i,
+          value: v,
+          startAngle: a0,
+          endAngle: a1,
+          padAngle: p
+        };
+      }
+
+      return arcs;
+    }
+
+    pie.value = function(_) {
+      return arguments.length ? (value = typeof _ === "function" ? _ : constant(+_), pie) : value;
+    };
+
+    pie.sortValues = function(_) {
+      return arguments.length ? (sortValues = _, sort = null, pie) : sortValues;
+    };
+
+    pie.sort = function(_) {
+      return arguments.length ? (sort = _, sortValues = null, pie) : sort;
+    };
+
+    pie.startAngle = function(_) {
+      return arguments.length ? (startAngle = typeof _ === "function" ? _ : constant(+_), pie) : startAngle;
+    };
+
+    pie.endAngle = function(_) {
+      return arguments.length ? (endAngle = typeof _ === "function" ? _ : constant(+_), pie) : endAngle;
+    };
+
+    pie.padAngle = function(_) {
+      return arguments.length ? (padAngle = typeof _ === "function" ? _ : constant(+_), pie) : padAngle;
+    };
+
+    return pie;
   }
 
   function noop() {}
@@ -8556,6 +9057,23 @@
       }
       return res;
   }
+  /**
+   * Get range
+   * @param {number} start Start number
+   * @param {number} end End number
+   * @param {number} step Step number
+   * @returns {Array}
+   * @private
+   */
+  var getRange = function (start, end, step) {
+      if (step === void 0) { step = 1; }
+      var res = [];
+      var n = Math.max(0, Math.ceil((end - start) / step)) | 0;
+      for (var i = start; i < n; i++) {
+          res.push(start + i * step);
+      }
+      return res;
+  };
   // emulate event
   var emulateEvent = {
       mouse: (function () {
@@ -20756,6 +21274,691 @@
    * Copyright (c) 2017 ~ present NAVER Corp.
    * billboard.js project is licensed under the MIT license
    */
+  var shapeArc = {
+      initPie: function () {
+          var $$ = this;
+          var config = $$.config;
+          var dataType = config.data_type;
+          var padding = config.pie_padding;
+          var startingAngle = config[dataType + "_startingAngle"] || 0;
+          var padAngle = ($$.hasType("pie") && padding ? padding * 0.01 :
+              config[dataType + "_padAngle"]) || 0;
+          $$.pie = pie$1()
+              .startAngle(startingAngle)
+              .endAngle(startingAngle + (2 * Math.PI))
+              .padAngle(padAngle)
+              .value(function (d) { return d.values.reduce(function (a, b) { return a + b.value; }, 0); })
+              .sort($$.getSortCompareFn.bind($$)(true));
+      },
+      updateRadius: function () {
+          var $$ = this;
+          var config = $$.config, state = $$.state;
+          var padding = config.pie_padding;
+          var w = config.gauge_width || config.donut_width;
+          var gaugeArcWidth = $$.filterTargetsToShow($$.data.targets).length *
+              config.gauge_arcs_minWidth;
+          // determine radius
+          state.radiusExpanded = Math.min(state.arcWidth, state.arcHeight) / 2 * ($$.hasMultiArcGauge() ? 0.85 : 1);
+          state.radius = state.radiusExpanded * 0.95;
+          state.innerRadiusRatio = w ? (state.radius - w) / state.radius : 0.6;
+          state.gaugeArcWidth = w || (gaugeArcWidth <= state.radius - state.innerRadius ?
+              state.radius - state.innerRadius :
+              (gaugeArcWidth <= state.radius ? gaugeArcWidth : state.radius));
+          var innerRadius = config.pie_innerRadius || (padding ? padding * (state.innerRadiusRatio + 0.1) : 0);
+          // NOTE: inner/outerRadius can be an object by user setting, only for 'pie' type
+          state.outerRadius = config.pie_outerRadius;
+          state.innerRadius = $$.hasType("donut") || $$.hasType("gauge") ?
+              state.radius * state.innerRadiusRatio : innerRadius;
+      },
+      /**
+       * Get pie's inner & outer radius value
+       * @param {object|undefined} d Data object
+       * @returns {object}
+       * @private
+       */
+      getRadius: function (d) {
+          var $$ = this;
+          var data = d && d.data;
+          var _a = $$.state, innerRadius = _a.innerRadius, outerRadius = _a.outerRadius;
+          if (!isNumber(innerRadius) && data) {
+              innerRadius = innerRadius[data.id] || 0;
+          }
+          if (isObject(outerRadius) && data && data.id in outerRadius) {
+              outerRadius = outerRadius[data.id];
+          }
+          else if (!isNumber(outerRadius)) {
+              outerRadius = $$.state.radius;
+          }
+          return { innerRadius: innerRadius, outerRadius: outerRadius };
+      },
+      updateArc: function () {
+          var $$ = this;
+          $$.updateRadius();
+          $$.svgArc = $$.getSvgArc();
+          $$.svgArcExpanded = $$.getSvgArcExpanded();
+      },
+      getArcLength: function () {
+          var $$ = this;
+          var config = $$.config;
+          var arcLengthInPercent = config.gauge_arcLength * 3.6;
+          var len = (2 * (arcLengthInPercent / 360));
+          if (arcLengthInPercent < -360) {
+              len = -2;
+          }
+          else if (arcLengthInPercent > 360) {
+              len = 2;
+          }
+          return len * Math.PI;
+      },
+      getStartAngle: function () {
+          var $$ = this;
+          var config = $$.config;
+          var isFullCircle = config.gauge_fullCircle;
+          var defaultStartAngle = -1 * Math.PI / 2;
+          var defaultEndAngle = Math.PI / 2;
+          var startAngle = config.gauge_startingAngle;
+          if (!isFullCircle && startAngle <= defaultStartAngle) {
+              startAngle = defaultStartAngle;
+          }
+          else if (!isFullCircle && startAngle >= defaultEndAngle) {
+              startAngle = defaultEndAngle;
+          }
+          else if (startAngle > Math.PI || startAngle < -1 * Math.PI) {
+              startAngle = Math.PI;
+          }
+          return startAngle;
+      },
+      updateAngle: function (dValue) {
+          var $$ = this;
+          var config = $$.config, state = $$.state;
+          var pie = $$.pie;
+          var d = dValue;
+          var found = false;
+          if (!config) {
+              return null;
+          }
+          var gStart = $$.getStartAngle();
+          var radius = config.gauge_fullCircle ? $$.getArcLength() : gStart * -2;
+          if (d.data && $$.isGaugeType(d.data) && !$$.hasMultiArcGauge()) {
+              // to prevent excluding total data sum during the init(when data.hide option is used), use $$.rendered state value
+              var totalSum = $$.getTotalDataSum(state.rendered);
+              var gEnd = radius * (totalSum / (config.gauge_max - config.gauge_min));
+              pie = pie
+                  .startAngle(gStart)
+                  .endAngle(gEnd + gStart);
+          }
+          pie($$.filterTargetsToShow())
+              .forEach(function (t, i) {
+              if (!found && t.data.id === d.data.id) {
+                  found = true;
+                  d = t;
+                  d.index = i;
+              }
+          });
+          if (isNaN(d.startAngle)) {
+              d.startAngle = 0;
+          }
+          if (isNaN(d.endAngle)) {
+              d.endAngle = d.startAngle;
+          }
+          if (d.data && $$.hasMultiArcGauge()) {
+              var gMin = config.gauge_min;
+              var gMax = config.gauge_max;
+              var gTic = radius / (gMax - gMin);
+              var gValue = d.value < gMin ? 0 : d.value < gMax ? d.value - gMin : (gMax - gMin);
+              d.startAngle = gStart;
+              d.endAngle = gStart + gTic * gValue;
+          }
+          return found ? d : null;
+      },
+      getSvgArc: function () {
+          var $$ = this;
+          var state = $$.state;
+          var singleArcWidth = state.gaugeArcWidth / $$.filterTargetsToShow($$.data.targets).length;
+          var hasMultiArcGauge = $$.hasMultiArcGauge();
+          var arc$1 = arc()
+              .innerRadius(function (d) {
+              var innerRadius = $$.getRadius(d).innerRadius;
+              return hasMultiArcGauge ?
+                  state.radius - singleArcWidth * (d.index + 1) :
+                  isNumber(innerRadius) ? innerRadius : 0;
+          })
+              .outerRadius(function (d) {
+              var outerRadius = $$.getRadius(d).outerRadius;
+              return hasMultiArcGauge ? (state.radius - singleArcWidth * d.index) : outerRadius;
+          });
+          var newArc = function (d, withoutUpdate) {
+              var path = "M 0 0";
+              if (d.value || d.data) {
+                  var updated = !withoutUpdate && $$.updateAngle(d);
+                  if (withoutUpdate) {
+                      path = arc$1(d);
+                  }
+                  else if (updated) {
+                      path = arc$1(updated);
+                  }
+              }
+              return path;
+          };
+          // TODO: extends all function
+          newArc.centroid = arc$1.centroid;
+          return newArc;
+      },
+      getSvgArcExpanded: function (rate) {
+          var $$ = this;
+          var state = $$.state;
+          var newRate = rate || 1;
+          var singleArcWidth = state.gaugeArcWidth / $$.filterTargetsToShow($$.data.targets).length;
+          var hasMultiArcGauge = $$.hasMultiArcGauge();
+          var expandWidth = Math.min(state.radiusExpanded * newRate - state.radius, singleArcWidth * 0.8 - (1 - newRate) * 100);
+          var arc$1 = arc()
+              .innerRadius(function (d) { return (hasMultiArcGauge ?
+              state.radius - singleArcWidth * (d.index + 1) : $$.getRadius(d).innerRadius); })
+              .outerRadius(function (d) {
+              var radius;
+              if (hasMultiArcGauge) {
+                  radius = state.radius - singleArcWidth * d.index + expandWidth;
+              }
+              else {
+                  var outerRadius = $$.getRadius(d).outerRadius;
+                  var radiusExpanded = state.radiusExpanded;
+                  if (state.radius !== outerRadius) {
+                      radiusExpanded -= Math.abs(state.radius - outerRadius);
+                  }
+                  radius = radiusExpanded * newRate;
+              }
+              return radius;
+          });
+          return function (d) {
+              var updated = $$.updateAngle(d);
+              return updated ? arc$1(updated) : "M 0 0";
+          };
+      },
+      getArc: function (d, withoutUpdate, force) {
+          return force || this.isArcType(d.data) ? this.svgArc(d, withoutUpdate) : "M 0 0";
+      },
+      transformForArcLabel: function (d) {
+          var $$ = this;
+          var config = $$.config, radiusExpanded = $$.state.radiusExpanded;
+          var updated = $$.updateAngle(d);
+          var translate = "";
+          if (updated) {
+              if ($$.hasMultiArcGauge()) {
+                  var y1 = Math.sin(updated.endAngle - Math.PI / 2);
+                  var x = Math.cos(updated.endAngle - Math.PI / 2) * (radiusExpanded + 25);
+                  var y = y1 * (radiusExpanded + 15 - Math.abs(y1 * 10)) + 3;
+                  translate = "translate(" + x + "," + y + ")";
+              }
+              else if (!$$.hasType("gauge") || $$.data.targets.length > 1) {
+                  var outerRadius = $$.getRadius(d).outerRadius;
+                  var c = this.svgArc.centroid(updated);
+                  var x = isNaN(c[0]) ? 0 : c[0];
+                  var y = isNaN(c[1]) ? 0 : c[1];
+                  var h = Math.sqrt(x * x + y * y);
+                  var ratio = ($$.hasType("donut") && config.donut_label_ratio) ||
+                      ($$.hasType("pie") && config.pie_label_ratio);
+                  if (ratio) {
+                      ratio = isFunction(ratio) ? ratio.bind($$.api)(d, outerRadius, h) : ratio;
+                  }
+                  else {
+                      ratio = outerRadius && (h ? (36 / outerRadius > 0.375 ? 1.175 - 36 / outerRadius : 0.8) * outerRadius / h : 0);
+                  }
+                  translate = "translate(" + x * ratio + "," + y * ratio + ")";
+              }
+          }
+          return translate;
+      },
+      convertToArcData: function (d) {
+          return this.addName({
+              id: d.data ? d.data.id : d.id,
+              value: d.value,
+              ratio: this.getRatio("arc", d),
+              index: d.index
+          });
+      },
+      textForArcLabel: function (selection) {
+          var $$ = this;
+          var hasGauge = $$.hasType("gauge");
+          if ($$.shouldShowArcLabel()) {
+              selection
+                  .style("fill", $$.updateTextColor.bind($$))
+                  .each(function (d) {
+                  var node = select(this);
+                  var updated = $$.updateAngle(d);
+                  var ratio = $$.getRatio("arc", updated);
+                  var isUnderThreshold = $$.meetsLabelThreshold(ratio, ($$.hasType("donut") && "donut") || ($$.hasType("gauge") && "gauge") || ($$.hasType("pie") && "pie"));
+                  if (isUnderThreshold) {
+                      var value = (updated || d).value;
+                      var text = ($$.getArcLabelFormat() || $$.defaultArcValueFormat)(value, ratio, d.data.id).toString();
+                      setTextValue(node, text, [-1, 1], hasGauge);
+                  }
+                  else {
+                      node.text("");
+                  }
+              });
+          }
+      },
+      expandArc: function (targetIds) {
+          var $$ = this;
+          var transiting = $$.state.transiting, $el = $$.$el;
+          // MEMO: avoid to cancel transition
+          if (transiting) {
+              var interval_1 = setInterval(function () {
+                  if (!transiting) {
+                      clearInterval(interval_1);
+                      $el.legend.selectAll("." + CLASS.legendItemFocused).size() > 0 &&
+                          $$.expandArc(targetIds);
+                  }
+              }, 10);
+              return;
+          }
+          var newTargetIds = $$.mapToTargetIds(targetIds);
+          $el.svg.selectAll($$.selectorTargets(newTargetIds, "." + CLASS.chartArc))
+              .each(function (d) {
+              if (!$$.shouldExpand(d.data.id)) {
+                  return;
+              }
+              var expandDuration = $$.getExpandConfig(d.data.id, "duration");
+              var svgArcExpandedSub = $$.getSvgArcExpanded($$.getExpandConfig(d.data.id, "rate"));
+              select(this).selectAll("path")
+                  .transition()
+                  .duration(expandDuration)
+                  .attr("d", $$.svgArcExpanded)
+                  .transition()
+                  .duration(expandDuration * 2)
+                  .attr("d", svgArcExpandedSub);
+          });
+      },
+      unexpandArc: function (targetIds) {
+          var $$ = this;
+          var transiting = $$.state.transiting, svg = $$.$el.svg;
+          if (transiting) {
+              return;
+          }
+          var newTargetIds = $$.mapToTargetIds(targetIds);
+          svg.selectAll($$.selectorTargets(newTargetIds, "." + CLASS.chartArc))
+              .selectAll("path")
+              .transition()
+              .duration(function (d) { return $$.getExpandConfig(d.data.id, "duration"); })
+              .attr("d", $$.svgArc);
+          svg.selectAll("" + CLASS.arc)
+              .style("opacity", "1");
+      },
+      /**
+       * Get expand config value
+       * @param {string} id data ID
+       * @param {string} key config key: 'duration | rate'
+       * @returns {number}
+       * @private
+       */
+      getExpandConfig: function (id, key) {
+          var $$ = this;
+          var config = $$.config;
+          var def = {
+              duration: 50,
+              rate: 0.98
+          };
+          var type;
+          if ($$.isDonutType(id)) {
+              type = "donut";
+          }
+          else if ($$.isGaugeType(id)) {
+              type = "gauge";
+          }
+          else if ($$.isPieType(id)) {
+              type = "pie";
+          }
+          return type ? config[type + "_expand_" + key] : def[key];
+      },
+      shouldExpand: function (id) {
+          var $$ = this;
+          var config = $$.config;
+          return ($$.isDonutType(id) && config.donut_expand) ||
+              ($$.isGaugeType(id) && config.gauge_expand) ||
+              ($$.isPieType(id) && config.pie_expand);
+      },
+      shouldShowArcLabel: function () {
+          var $$ = this;
+          var config = $$.config;
+          return ["pie", "donut", "gauge"]
+              .some(function (v) { return $$.hasType(v) && config[v + "_label_show"]; });
+      },
+      getArcLabelFormat: function () {
+          var $$ = this;
+          var config = $$.config;
+          var format = config.pie_label_format;
+          if ($$.hasType("gauge")) {
+              format = config.gauge_label_format;
+          }
+          else if ($$.hasType("donut")) {
+              format = config.donut_label_format;
+          }
+          return isFunction(format) ? format.bind($$.api) : format;
+      },
+      getArcTitle: function () {
+          var $$ = this;
+          var type = ($$.hasType("donut") && "donut") || ($$.hasType("gauge") && "gauge");
+          return type ? $$.config[type + "_title"] : "";
+      },
+      updateTargetsForArc: function (targets) {
+          var $$ = this;
+          var $el = $$.$el;
+          var hasGauge = $$.hasType("gauge");
+          var classChartArc = $$.getChartClass("Arc");
+          var classArcs = $$.getClass("arcs", true);
+          var classFocus = $$.classFocus.bind($$);
+          var chartArcs = $el.main.select("." + CLASS.chartArcs);
+          var mainPieUpdate = chartArcs
+              .selectAll("." + CLASS.chartArc)
+              .data($$.pie(targets))
+              .attr("class", function (d) { return classChartArc(d) + classFocus(d.data); });
+          var mainPieEnter = mainPieUpdate.enter().append("g")
+              .attr("class", classChartArc);
+          mainPieEnter.append("g")
+              .attr("class", classArcs)
+              .merge(mainPieUpdate);
+          mainPieEnter.append("text")
+              .attr("dy", hasGauge && !$$.hasMultiTargets() ? "-.1em" : ".35em")
+              .style("opacity", "0")
+              .style("text-anchor", "middle")
+              .style("pointer-events", "none");
+          $el.text = chartArcs.selectAll("." + CLASS.target + " text");
+          // MEMO: can not keep same color..., but not bad to update color in redraw
+          // mainPieUpdate.exit().remove();
+      },
+      initArc: function () {
+          var $$ = this;
+          var $el = $$.$el;
+          $el.arcs = $el.main.select("." + CLASS.chart)
+              .append("g")
+              .attr("class", CLASS.chartArcs)
+              .attr("transform", $$.getTranslate("arc"));
+          $$.setArcTitle();
+      },
+      /**
+       * Set arc title text
+       * @private
+       */
+      setArcTitle: function () {
+          var $$ = this;
+          var title = $$.getArcTitle();
+          var hasGauge = $$.hasType("gauge");
+          if (title) {
+              var text = $$.$el.arcs.append("text")
+                  .attr("class", CLASS[hasGauge ? "chartArcsGaugeTitle" : "chartArcsTitle"])
+                  .style("text-anchor", "middle");
+              if (hasGauge) {
+                  text
+                      .attr("dy", "-0.3em")
+                      .style("font-size", "27px");
+              }
+              setTextValue(text, title, hasGauge ? undefined : [-0.6, 1.35], true);
+          }
+      },
+      redrawArc: function (duration, durationForExit, withTransform) {
+          var $$ = this;
+          var config = $$.config, state = $$.state, main = $$.$el.main;
+          var hasInteraction = config.interaction_enabled;
+          var isSelectable = hasInteraction && config.data_selection_isselectable;
+          var mainArc = main.selectAll("." + CLASS.arcs)
+              .selectAll("." + CLASS.arc)
+              .data($$.arcData.bind($$));
+          mainArc.exit().transition()
+              .duration(durationForExit)
+              .style("opacity", "0")
+              .remove();
+          mainArc = mainArc.enter().append("path")
+              .attr("class", $$.getClass("arc", true))
+              .style("fill", function (d) { return $$.color(d.data); })
+              .style("cursor", function (d) { return (isSelectable && isSelectable.bind($$.api)(d) ? "pointer" : null); })
+              .style("opacity", "0")
+              .each(function (d) {
+              if ($$.isGaugeType(d.data)) {
+                  d.startAngle = config.gauge_startingAngle;
+                  d.endAngle = config.gauge_startingAngle;
+              }
+              this._current = d;
+          })
+              .merge(mainArc);
+          if ($$.hasType("gauge")) {
+              $$.updateGaugeMax();
+              $$.hasMultiArcGauge() && $$.redrawMultiArcGauge();
+          }
+          mainArc
+              .attr("transform", function (d) { return (!$$.isGaugeType(d.data) && withTransform ? "scale(0)" : ""); })
+              .style("opacity", function (d) {
+              return d === this._current ? "0" : "1";
+          })
+              .each(function () {
+              state.transiting = true;
+          })
+              .transition()
+              .duration(duration)
+              .attrTween("d", function (d) {
+              var updated = $$.updateAngle(d);
+              if (!updated) {
+                  return function () { return "M 0 0"; };
+              }
+              if (isNaN(this._current.startAngle)) {
+                  this._current.startAngle = 0;
+              }
+              if (isNaN(this._current.endAngle)) {
+                  this._current.endAngle = this._current.startAngle;
+              }
+              var interpolate$1$1 = interpolate$1(this._current, updated);
+              this._current = interpolate$1$1(0);
+              return function (t) {
+                  var interpolated = interpolate$1$1(t);
+                  interpolated.data = d.data; // data.id will be updated by interporator
+                  return $$.getArc(interpolated, true);
+              };
+          })
+              .attr("transform", withTransform ? "scale(1)" : "")
+              .style("fill", function (d) {
+              var color;
+              if ($$.levelColor) {
+                  color = $$.levelColor(d.data.values[0].value);
+                  // update data's color
+                  config.data_colors[d.data.id] = color;
+              }
+              else {
+                  color = $$.color(d.data);
+              }
+              return color;
+          })
+              // Where gauge reading color would receive customization.
+              .style("opacity", "1")
+              .call(endall, function () {
+              if ($$.levelColor) {
+                  var path = select(this);
+                  var d = path.datum();
+                  $$.updateLegendItemColor(d.data.id, path.style("fill"));
+              }
+              state.transiting = false;
+              callFn(config.onrendered, $$.api);
+          });
+          // bind arc events
+          hasInteraction && $$.bindArcEvent(mainArc);
+          $$.hasType("gauge") && $$.redrawBackgroundArcs();
+          $$.redrawArcText(duration);
+      },
+      redrawBackgroundArcs: function () {
+          var $$ = this;
+          var config = $$.config, state = $$.state;
+          var hasMultiArcGauge = $$.hasMultiArcGauge();
+          var isFullCircle = config.gauge_fullCircle;
+          var startAngle = $$.getStartAngle();
+          var endAngle = isFullCircle ? startAngle + $$.getArcLength() : startAngle * -1;
+          var backgroundArc = $$.$el.arcs.select((hasMultiArcGauge ? "g" : "") + "." + CLASS.chartArcsBackground);
+          if (hasMultiArcGauge) {
+              var index_1 = 0;
+              backgroundArc = backgroundArc
+                  .selectAll("path." + CLASS.chartArcsBackground)
+                  .data($$.data.targets);
+              backgroundArc.enter()
+                  .append("path")
+                  .attr("class", function (d, i) { return CLASS.chartArcsBackground + " " + CLASS.chartArcsBackground + "-" + i; })
+                  .merge(backgroundArc)
+                  .style("fill", (config.gauge_background) || null)
+                  .attr("d", function (_a) {
+                  var id = _a.id;
+                  if (state.hiddenTargetIds.indexOf(id) >= 0) {
+                      return "M 0 0";
+                  }
+                  var d = {
+                      data: [{ value: config.gauge_max }],
+                      startAngle: startAngle,
+                      endAngle: endAngle,
+                      index: index_1++
+                  };
+                  return $$.getArc(d, true, true);
+              });
+              backgroundArc.exit().remove();
+          }
+          else {
+              backgroundArc.attr("d", function () {
+                  var d = {
+                      data: [{ value: config.gauge_max }],
+                      startAngle: startAngle,
+                      endAngle: endAngle
+                  };
+                  return $$.getArc(d, true, true);
+              });
+          }
+      },
+      bindArcEvent: function (arc) {
+          var $$ = this;
+          var config = $$.config, state = $$.state;
+          var isTouch = state.inputType === "touch";
+          var isMouse = state.inputType === "mouse";
+          // eslint-disable-next-line
+          function selectArc(_this, arcData, id) {
+              // transitions
+              $$.expandArc(id);
+              $$.api.focus(id);
+              $$.toggleFocusLegend(id, true);
+              $$.showTooltip([arcData], _this);
+          }
+          // eslint-disable-next-line
+          function unselectArc(arcData) {
+              var id = (arcData && arcData.id) || undefined;
+              $$.unexpandArc(id);
+              $$.api.revert();
+              $$.revertLegend();
+              $$.hideTooltip();
+          }
+          arc
+              .on("click", function (event, d, i) {
+              var updated = $$.updateAngle(d);
+              var arcData;
+              if (updated) {
+                  arcData = $$.convertToArcData(updated);
+                  $$.toggleShape && $$.toggleShape(this, arcData, i);
+                  config.data_onclick.bind($$.api)(arcData, this);
+              }
+          });
+          // mouse events
+          if (isMouse) {
+              arc
+                  .on("mouseover", function (event, d) {
+                  if (state.transiting) { // skip while transiting
+                      return;
+                  }
+                  state.event = event;
+                  var updated = $$.updateAngle(d);
+                  var arcData = updated ? $$.convertToArcData(updated) : null;
+                  var id = (arcData && arcData.id) || undefined;
+                  selectArc(this, arcData, id);
+                  $$.setOverOut(true, arcData);
+              })
+                  .on("mouseout", function (event, d) {
+                  if (state.transiting) { // skip while transiting
+                      return;
+                  }
+                  state.event = event;
+                  var updated = $$.updateAngle(d);
+                  var arcData = updated ? $$.convertToArcData(updated) : null;
+                  unselectArc();
+                  $$.setOverOut(false, arcData);
+              })
+                  .on("mousemove", function (event, d) {
+                  var updated = $$.updateAngle(d);
+                  var arcData = updated ? $$.convertToArcData(updated) : null;
+                  state.event = event;
+                  $$.showTooltip([arcData], this);
+              });
+          }
+          // touch events
+          if (isTouch && $$.hasArcType() && !$$.radars) {
+              var getEventArc_1 = function (event) {
+                  var touch = event.changedTouches[0];
+                  var eventArc = select(doc.elementFromPoint(touch.clientX, touch.clientY));
+                  return eventArc;
+              };
+              $$.$el.svg
+                  .on("touchstart touchmove", function (event) {
+                  if (state.transiting) { // skip while transiting
+                      return;
+                  }
+                  var eventArc = getEventArc_1(event);
+                  var datum = eventArc.datum();
+                  var updated = (datum && datum.data && datum.data.id) ? $$.updateAngle(datum) : null;
+                  var arcData = updated ? $$.convertToArcData(updated) : null;
+                  var id = (arcData && arcData.id) || undefined;
+                  $$.callOverOutForTouch(arcData);
+                  isUndefined(id) ?
+                      unselectArc() : selectArc(this, arcData, id);
+              });
+          }
+      },
+      redrawArcText: function (duration) {
+          var $$ = this;
+          var config = $$.config, state = $$.state, _a = $$.$el, main = _a.main, arcs = _a.arcs;
+          var hasGauge = $$.hasType("gauge");
+          var hasMultiArcGauge = $$.hasMultiArcGauge();
+          var text;
+          // for gauge type, update text when has no title & multi data
+          if (!(hasGauge && $$.data.targets.length === 1 && config.gauge_title)) {
+              text = main.selectAll("." + CLASS.chartArc)
+                  .select("text")
+                  .style("opacity", "0")
+                  .attr("class", function (d) { return ($$.isGaugeType(d.data) ? CLASS.gaugeValue : null); })
+                  .call($$.textForArcLabel.bind($$))
+                  .attr("transform", $$.transformForArcLabel.bind($$))
+                  .style("font-size", function (d) { return ($$.isGaugeType(d.data) && $$.data.targets.length === 1 && !hasMultiArcGauge ?
+                  Math.round(state.radius / 5) + "px" : null); })
+                  .transition()
+                  .duration(duration)
+                  .style("opacity", function (d) { return ($$.isTargetToShow(d.data.id) && $$.isArcType(d.data) ? "1" : "0"); });
+              hasMultiArcGauge && text.attr("dy", "-.1em");
+          }
+          main.select("." + CLASS.chartArcsTitle)
+              .style("opacity", $$.hasType("donut") || hasGauge ? "1" : "0");
+          if (hasGauge) {
+              var isFullCircle = config.gauge_fullCircle;
+              isFullCircle && text && text.attr("dy", "" + (hasMultiArcGauge ? 0 : Math.round(state.radius / 14)));
+              if (config.gauge_label_show) {
+                  arcs.select("." + CLASS.chartArcsGaugeUnit)
+                      .attr("dy", (isFullCircle ? 1.5 : 0.75) + "em")
+                      .text(config.gauge_units);
+                  arcs.select("." + CLASS.chartArcsGaugeMin)
+                      .attr("dx", -1 * (state.innerRadius + ((state.radius - state.innerRadius) / (isFullCircle ? 1 : 2))) + "px")
+                      .attr("dy", "1.2em")
+                      .text($$.textForGaugeMinMax(config.gauge_min, false));
+                  // show max text when isn't fullCircle
+                  !isFullCircle && arcs.select("." + CLASS.chartArcsGaugeMax)
+                      .attr("dx", state.innerRadius + ((state.radius - state.innerRadius) / 2) + "px")
+                      .attr("dy", "1.2em")
+                      .text($$.textForGaugeMinMax(config.gauge_max, true));
+              }
+          }
+      }
+  };
+
+  /**
+   * Copyright (c) 2017 ~ present NAVER Corp.
+   * billboard.js project is licensed under the MIT license
+   */
   var shapeBar = {
       initBar: function () {
           var $el = this.$el;
@@ -20933,6 +22136,889 @@
       }
   };
 
+  var getTransitionName = function () { return getRandom(); };
+  var shapePoint = {
+      hasValidPointType: function (type) {
+          return /^(circle|rect(angle)?|polygon|ellipse|use)$/i.test(type || this.config.point_type);
+      },
+      hasValidPointDrawMethods: function (type) {
+          var pointType = type || this.config.point_type;
+          return isObjectType(pointType) &&
+              isFunction(pointType.create) && isFunction(pointType.update);
+      },
+      initialOpacityForCircle: function (d) {
+          var _a = this, config = _a.config, withoutFadeIn = _a.state.withoutFadeIn;
+          var opacity = config.point_opacity;
+          if (isUndefined(opacity)) {
+              opacity = this.getBaseValue(d) !== null &&
+                  withoutFadeIn[d.id] ? this.opacityForCircle(d) : "0";
+          }
+          return opacity;
+      },
+      opacityForCircle: function (d) {
+          var config = this.config;
+          var opacity = config.point_opacity;
+          if (isUndefined(opacity)) {
+              opacity = config.point_show && !config.point_focus_only ? "1" : "0";
+              opacity = isValue(this.getBaseValue(d)) ?
+                  (this.isBubbleType(d) || this.isScatterType(d) ?
+                      "0.5" : opacity) : "0";
+          }
+          return opacity;
+      },
+      initCircle: function () {
+          var $$ = this;
+          var main = $$.$el.main;
+          $$.point = $$.generatePoint();
+          if (($$.hasType("bubble") || $$.hasType("scatter")) && main.select("." + CLASS.chartCircles).empty()) {
+              main.select("." + CLASS.chart)
+                  .append("g")
+                  .attr("class", CLASS.chartCircles);
+          }
+      },
+      updateTargetForCircle: function (targetsValue, enterNodeValue) {
+          var _this = this;
+          var $$ = this;
+          var config = $$.config, data = $$.data, $el = $$.$el;
+          var selectionEnabled = config.interaction_enabled && config.data_selection_enabled;
+          var isSelectable = selectionEnabled && config.data_selection_isselectable;
+          var classCircles = $$.getClass("circles", true);
+          if (!config.point_show) {
+              return;
+          }
+          !$el.circle && $$.initCircle();
+          var targets = targetsValue;
+          var enterNode = enterNodeValue;
+          // only for scatter & bubble type should generate seprate <g> node
+          if (!targets) {
+              targets = (data.targets)
+                  .filter(function (d) { return _this.isScatterType(d) || _this.isBubbleType(d); });
+              var mainCircle = $el.main.select("." + CLASS.chartCircles)
+                  .style("pointer-events", "none")
+                  .selectAll("." + CLASS.circles)
+                  .data(targets)
+                  .attr("class", classCircles);
+              mainCircle.exit().remove();
+              enterNode = mainCircle.enter();
+          }
+          // Circles for each data point on lines
+          selectionEnabled && enterNode.append("g")
+              .attr("class", function (d) { return $$.generateClass(CLASS.selectedCircles, d.id); });
+          enterNode.append("g")
+              .attr("class", classCircles)
+              .style("cursor", function (d) { return (isSelectable && isSelectable(d) ? "pointer" : null); });
+          // Update date for selected circles
+          selectionEnabled && targets.forEach(function (t) {
+              $el.main.selectAll("." + CLASS.selectedCircles + $$.getTargetSelectorSuffix(t.id))
+                  .selectAll("" + CLASS.selectedCircle)
+                  .each(function (d) {
+                  d.value = t.values[d.index].value;
+              });
+          });
+      },
+      updateCircle: function (isSub) {
+          if (isSub === void 0) { isSub = false; }
+          var $$ = this;
+          var config = $$.config, state = $$.state, $el = $$.$el;
+          var focusOnly = config.point_focus_only;
+          var $root = isSub ? $el.subchart : $el;
+          if (config.point_show && !state.toggling) {
+              var circles = $root.main.selectAll("." + CLASS.circles)
+                  .selectAll("." + CLASS.circle)
+                  .data(function (d) { return (($$.isLineType(d) && $$.shouldDrawPointsForLine(d)) ||
+                  $$.isBubbleType(d) || $$.isRadarType(d) || $$.isScatterType(d) ?
+                  (focusOnly ? [d.values[0]] : d.values) : []); });
+              circles.exit().remove();
+              circles.enter()
+                  .filter(Boolean)
+                  .append($$.point("create", this, $$.pointR.bind($$), $$.color));
+              $root.circle = $root.main.selectAll("." + CLASS.circles + " ." + CLASS.circle)
+                  .style("stroke", $$.color)
+                  .style("opacity", $$.initialOpacityForCircle.bind($$));
+          }
+      },
+      redrawCircle: function (cx, cy, withTransition, flow, isSub) {
+          if (isSub === void 0) { isSub = false; }
+          var $$ = this;
+          var rendered = $$.state.rendered, $el = $$.$el;
+          var $root = isSub ? $el.subchart : $el;
+          var selectedCircles = $root.main.selectAll("." + CLASS.selectedCircle);
+          if (!$$.config.point_show) {
+              return [];
+          }
+          var fn = $$.point("update", $$, cx, cy, $$.color, withTransition, flow, selectedCircles);
+          var posAttr = $$.isCirclePoint() ? "c" : "";
+          var t = getRandom();
+          var opacityStyleFn = $$.opacityForCircle.bind($$);
+          var mainCircles = [];
+          $root.circle.each(function (d) {
+              var result = fn.bind(this)(d);
+              result = ((withTransition || !rendered) ? result.transition(t) : result)
+                  .style("opacity", opacityStyleFn);
+              mainCircles.push(result);
+          });
+          return [
+              mainCircles,
+              (withTransition ? selectedCircles.transition() : selectedCircles)
+                  .attr(posAttr + "x", cx)
+                  .attr(posAttr + "y", cy)
+          ];
+      },
+      /**
+       * Show focused data point circle
+       * @param {object} d Selected data
+       * @private
+       */
+      showCircleFocus: function (d) {
+          var $$ = this;
+          var config = $$.config, _a = $$.state, hasRadar = _a.hasRadar, resizing = _a.resizing, toggling = _a.toggling, transiting = _a.transiting, $el = $$.$el;
+          var circle = $el.circle;
+          if (transiting === false && config.point_focus_only && circle) {
+              var cx = (hasRadar ? $$.radarCircleX : $$.circleX).bind($$);
+              var cy = (hasRadar ? $$.radarCircleY : $$.circleY).bind($$);
+              var withTransition = toggling || isUndefined(d);
+              var fn_1 = $$.point("update", $$, cx, cy, $$.color, resizing ? false : withTransition);
+              if (d) {
+                  circle = circle
+                      .filter(function (t) {
+                      var data = d.filter(function (v) { return v.id === t.id; });
+                      return data.length ?
+                          select(this).datum(data[0]) : false;
+                  });
+              }
+              circle
+                  .attr("class", this.updatePointClass.bind(this))
+                  .style("opacity", "1")
+                  .each(function (d) {
+                  var id = d.id, index = d.index, value = d.value;
+                  var visibility = "hidden";
+                  if (isValue(value)) {
+                      fn_1.bind(this)(d);
+                      $$.expandCircles(index, id);
+                      visibility = "";
+                  }
+                  this.style.visibility = visibility;
+              });
+          }
+      },
+      /**
+       * Hide focused data point circle
+       * @private
+       */
+      hideCircleFocus: function () {
+          var $$ = this;
+          var config = $$.config, circle = $$.$el.circle;
+          if (config.point_focus_only && circle) {
+              $$.unexpandCircles();
+              circle.style("visibility", "hidden");
+          }
+      },
+      circleX: function (d) {
+          return this.xx(d);
+      },
+      updateCircleY: function (isSub) {
+          if (isSub === void 0) { isSub = false; }
+          var $$ = this;
+          var getPoints = $$.generateGetLinePoints($$.getShapeIndices($$.isLineType), isSub);
+          return function (d, i) {
+              var id = d.id;
+              return $$.isGrouped(id) ?
+                  getPoints(d, i)[0][1] :
+                  $$.getYScaleById(id, isSub)($$.getBaseValue(d));
+          };
+      },
+      getCircles: function (i, id) {
+          var $$ = this;
+          var suffix = (isValue(i) ? "-" + i : "");
+          return (id ? $$.$el.main.selectAll("." + CLASS.circles + $$.getTargetSelectorSuffix(id)) : $$.$el.main)
+              .selectAll("." + CLASS.circle + suffix);
+      },
+      expandCircles: function (i, id, reset) {
+          var $$ = this;
+          var r = $$.pointExpandedR.bind($$);
+          reset && $$.unexpandCircles();
+          var circles = $$.getCircles(i, id).classed(CLASS.EXPANDED, true);
+          var scale = r(circles) / $$.config.point_r;
+          var ratio = 1 - scale;
+          if ($$.isCirclePoint()) {
+              circles.attr("r", r);
+          }
+          else {
+              // transform must be applied to each node individually
+              circles.each(function () {
+                  var point = select(this);
+                  if (this.tagName === "circle") {
+                      point.attr("r", r);
+                  }
+                  else {
+                      var _a = this.getBBox(), width = _a.width, height = _a.height;
+                      var x = ratio * (+point.attr("x") + width / 2);
+                      var y = ratio * (+point.attr("y") + height / 2);
+                      point.attr("transform", "translate(" + x + " " + y + ") scale(" + scale + ")");
+                  }
+              });
+          }
+      },
+      unexpandCircles: function (i) {
+          var $$ = this;
+          var r = $$.pointR.bind($$);
+          var circles = $$.getCircles(i)
+              .filter(function () {
+              return select(this).classed(CLASS.EXPANDED);
+          })
+              .classed(CLASS.EXPANDED, false);
+          circles.attr("r", r);
+          !$$.isCirclePoint() &&
+              circles.attr("transform", "scale(" + r(circles) / $$.config.point_r + ")");
+      },
+      pointR: function (d) {
+          var $$ = this;
+          var config = $$.config;
+          var pointR = config.point_r;
+          var r = pointR;
+          if ($$.isBubbleType(d)) {
+              r = $$.getBubbleR(d);
+          }
+          else if (isFunction(pointR)) {
+              r = pointR.bind($$.api)(d);
+          }
+          return r;
+      },
+      pointExpandedR: function (d) {
+          var $$ = this;
+          var config = $$.config;
+          var scale = $$.isBubbleType(d) ? 1.15 : 1.75;
+          return config.point_focus_expand_enabled ?
+              (config.point_focus_expand_r || $$.pointR(d) * scale) : $$.pointR(d);
+      },
+      pointSelectR: function (d) {
+          var $$ = this;
+          var selectR = $$.config.point_select_r;
+          return isFunction(selectR) ?
+              selectR(d) : (selectR || $$.pointR(d) * 4);
+      },
+      isWithinCircle: function (node, r) {
+          var mouse = getPointer(this.state.event, node);
+          var element = select(node);
+          var prefix = this.isCirclePoint(node) ? "c" : "";
+          var cx = +element.attr(prefix + "x");
+          var cy = +element.attr(prefix + "y");
+          // if node don't have cx/y or x/y attribute value
+          if (!(cx || cy) && node.nodeType === 1) {
+              var _a = getBoundingRect(node), x = _a.x, y = _a.y;
+              cx = x;
+              cy = y;
+          }
+          return Math.sqrt(Math.pow(cx - mouse[0], 2) + Math.pow(cy - mouse[1], 2)) < (r || this.config.point_sensitivity);
+      },
+      insertPointInfoDefs: function (point, id) {
+          var $$ = this;
+          var copyAttr = function (from, target) {
+              var attribs = from.attributes;
+              for (var i = 0, name_1; (name_1 = attribs[i]); i++) {
+                  name_1 = name_1.name;
+                  target.setAttribute(name_1, from.getAttribute(name_1));
+              }
+          };
+          var doc$1 = new DOMParser().parseFromString(point, "image/svg+xml");
+          var node = doc$1.documentElement;
+          var clone = doc.createElementNS(namespaces.svg, node.nodeName.toLowerCase());
+          clone.id = id;
+          clone.style.fill = "inherit";
+          clone.style.stroke = "inherit";
+          copyAttr(node, clone);
+          if (node.childNodes && node.childNodes.length) {
+              var parent_1 = select(clone);
+              if ("innerHTML" in clone) {
+                  parent_1.html(node.innerHTML);
+              }
+              else {
+                  toArray(node.childNodes).forEach(function (v) {
+                      copyAttr(v, parent_1.append(v.tagName).node());
+                  });
+              }
+          }
+          $$.$el.defs.node().appendChild(clone);
+      },
+      pointFromDefs: function (id) {
+          return this.$el.defs.select("#" + id);
+      },
+      updatePointClass: function (d) {
+          var $$ = this;
+          var circle = $$.$el.circle;
+          var pointClass = false;
+          if (isObject(d) || circle) {
+              pointClass = d === true ?
+                  circle.each(function (d) {
+                      var className = $$.getClass("circle", true)(d);
+                      if (this.getAttribute("class").indexOf(CLASS.EXPANDED) > -1) {
+                          className += " " + CLASS.EXPANDED;
+                      }
+                      this.setAttribute("class", className);
+                  }) : $$.getClass("circle", true)(d);
+          }
+          return pointClass;
+      },
+      generateGetLinePoints: function (lineIndices, isSub) {
+          var $$ = this;
+          var config = $$.config;
+          var x = $$.getShapeX(0, lineIndices, isSub);
+          var y = $$.getShapeY(isSub);
+          var lineOffset = $$.getShapeOffset($$.isLineType, lineIndices, isSub);
+          var yScale = $$.getYScaleById.bind($$);
+          return function (d, i) {
+              var y0 = yScale.call($$, d.id, isSub)($$.getShapeYMin(d.id));
+              var offset = lineOffset(d, i) || y0; // offset is for stacked area chart
+              var posX = x(d);
+              var posY = y(d);
+              // fix posY not to overflow opposite quadrant
+              if (config.axis_rotated && ((d.value > 0 && posY < y0) || (d.value < 0 && y0 < posY))) {
+                  posY = y0;
+              }
+              // 1 point that marks the line position
+              var point = [posX, posY - (y0 - offset)];
+              return [
+                  point,
+                  point,
+                  point,
+                  point
+              ];
+          };
+      },
+      generatePoint: function () {
+          var $$ = this;
+          var config = $$.config, datetimeId = $$.state.datetimeId;
+          var ids = [];
+          var pattern = notEmpty(config.point_pattern) ? config.point_pattern : [config.point_type];
+          return function (method, context) {
+              var args = [];
+              for (var _i = 2; _i < arguments.length; _i++) {
+                  args[_i - 2] = arguments[_i];
+              }
+              return function (d) {
+                  var id = $$.getTargetSelectorSuffix(d.id || (d.data && d.data.id) || d);
+                  var element = select(this);
+                  ids.indexOf(id) < 0 && ids.push(id);
+                  var point = pattern[ids.indexOf(id) % pattern.length];
+                  if ($$.hasValidPointType(point)) {
+                      point = $$[point];
+                  }
+                  else if (!$$.hasValidPointDrawMethods(point)) {
+                      var pointId = datetimeId + "-point" + id;
+                      var pointFromDefs = $$.pointFromDefs(pointId);
+                      if (pointFromDefs.size() < 1) {
+                          $$.insertPointInfoDefs(point, pointId);
+                      }
+                      if (method === "create") {
+                          return $$.custom.create.bind(context).apply(void 0, __spreadArray([element, pointId], args));
+                      }
+                      else if (method === "update") {
+                          return $$.custom.update.bind(context).apply(void 0, __spreadArray([element], args));
+                      }
+                  }
+                  return point[method].bind(context).apply(void 0, __spreadArray([element], args));
+              };
+          };
+      },
+      custom: {
+          create: function (element, id, sizeFn, fillStyleFn) {
+              return element.append("use")
+                  .attr("xlink:href", "#" + id)
+                  .attr("class", this.updatePointClass.bind(this))
+                  .style("fill", fillStyleFn)
+                  .node();
+          },
+          update: function (element, xPosFn, yPosFn, fillStyleFn, withTransition, flow, selectedCircles) {
+              var _a = element.node().getBBox(), width = _a.width, height = _a.height;
+              var xPosFn2 = function (d) { return xPosFn(d) - width / 2; };
+              var yPosFn2 = function (d) { return yPosFn(d) - height / 2; };
+              var mainCircles = element;
+              if (withTransition) {
+                  var transitionName = getTransitionName();
+                  flow && mainCircles.attr("x", xPosFn2);
+                  mainCircles = mainCircles.transition(transitionName);
+                  selectedCircles && selectedCircles.transition(getTransitionName());
+              }
+              return mainCircles
+                  .attr("x", xPosFn2)
+                  .attr("y", yPosFn2)
+                  .style("fill", fillStyleFn);
+          }
+      },
+      // 'circle' data point
+      circle: {
+          create: function (element, sizeFn, fillStyleFn) {
+              return element.append("circle")
+                  .attr("class", this.updatePointClass.bind(this))
+                  .attr("r", sizeFn)
+                  .style("fill", fillStyleFn)
+                  .node();
+          },
+          update: function (element, xPosFn, yPosFn, fillStyleFn, withTransition, flow, selectedCircles) {
+              var $$ = this;
+              var mainCircles = element;
+              // when '.load()' called, bubble size should be updated
+              if ($$.hasType("bubble")) {
+                  mainCircles.attr("r", $$.pointR.bind($$));
+              }
+              if (withTransition) {
+                  var transitionName = getTransitionName();
+                  flow && mainCircles.attr("cx", xPosFn);
+                  if (mainCircles.attr("cx")) {
+                      mainCircles = mainCircles.transition(transitionName);
+                  }
+                  selectedCircles && selectedCircles.transition(getTransitionName());
+              }
+              return mainCircles
+                  .attr("cx", xPosFn)
+                  .attr("cy", yPosFn)
+                  .style("fill", fillStyleFn);
+          }
+      },
+      // 'rectangle' data point
+      rectangle: {
+          create: function (element, sizeFn, fillStyleFn) {
+              var rectSizeFn = function (d) { return sizeFn(d) * 2.0; };
+              return element.append("rect")
+                  .attr("class", this.updatePointClass.bind(this))
+                  .attr("width", rectSizeFn)
+                  .attr("height", rectSizeFn)
+                  .style("fill", fillStyleFn)
+                  .node();
+          },
+          update: function (element, xPosFn, yPosFn, fillStyleFn, withTransition, flow, selectedCircles) {
+              var $$ = this;
+              var r = $$.config.point_r;
+              var rectXPosFn = function (d) { return xPosFn(d) - r; };
+              var rectYPosFn = function (d) { return yPosFn(d) - r; };
+              var mainCircles = element;
+              if (withTransition) {
+                  var transitionName = getTransitionName();
+                  flow && mainCircles.attr("x", rectXPosFn);
+                  mainCircles = mainCircles.transition(transitionName);
+                  selectedCircles && selectedCircles.transition(getTransitionName());
+              }
+              return mainCircles
+                  .attr("x", rectXPosFn)
+                  .attr("y", rectYPosFn)
+                  .style("fill", fillStyleFn);
+          }
+      }
+  };
+
+  /**
+   * Copyright (c) 2017 ~ present NAVER Corp.
+   * billboard.js project is licensed under the MIT license
+   */
+  /**
+   * Get the position value
+   * @param {boolean} isClockwise If the direction is clockwise
+   * @param {string} type Coordinate type 'x' or 'y'
+   * @param {number} edge Number of edge
+   * @param {number} pos The indexed position
+   * @param {number} range Range value
+   * @param {number} ratio Ratio value
+   * @returns {number}
+   * @private
+   */
+  function getPosition(isClockwise, type, edge, pos, range, ratio) {
+      var index = isClockwise && pos > 0 ? edge - pos : pos;
+      var r = 2 * Math.PI;
+      var func = type === "x" ? Math.sin : Math.cos;
+      return range * (1 - ratio * func(index * r / edge));
+  }
+  // cache key
+  var cacheKey = KEY.radarPoints;
+  var shapeRadar = {
+      initRadar: function () {
+          var $$ = this;
+          var config = $$.config, current = $$.state.current, $el = $$.$el;
+          if ($$.hasType("radar")) {
+              $el.radar = $el.main.select("." + CLASS.chart).append("g")
+                  .attr("class", CLASS.chartRadars);
+              // level
+              $el.radar.levels = $el.radar.append("g")
+                  .attr("class", CLASS.levels);
+              // axis
+              $el.radar.axes = $el.radar.append("g")
+                  .attr("class", CLASS.axis);
+              // shapes
+              $el.radar.shapes = $el.radar.append("g")
+                  .attr("class", CLASS.shapes);
+              current.dataMax = config.radar_axis_max || $$.getMinMaxData().max[0].value;
+          }
+      },
+      getRadarSize: function () {
+          var $$ = this;
+          var config = $$.config, _a = $$.state, arcWidth = _a.arcWidth, arcHeight = _a.arcHeight;
+          var padding = config.axis_x_categories.length < 4 ? -20 : 10;
+          var size = (Math.min(arcWidth, arcHeight) - padding) / 2;
+          return [size, size];
+      },
+      updateTargetsForRadar: function (targets) {
+          var $$ = this;
+          var config = $$.config;
+          if (isEmpty(config.axis_x_categories)) {
+              config.axis_x_categories = getRange(0, getMinMax$1("max", targets.map(function (v) { return v.values.length; })));
+          }
+          $$.generateRadarPoints();
+      },
+      getRadarPosition: function (type, index, range, ratio) {
+          var $$ = this;
+          var config = $$.config;
+          var _a = $$.getRadarSize(), width = _a[0], height = _a[1];
+          var edge = config.axis_x_categories.length;
+          var isClockwise = config.radar_direction_clockwise;
+          var pos = toArray(type).map(function (v) { return getPosition(isClockwise, v, edge, index, isDefined(range) ? range : (type === "x" ? width : height), isNumber(ratio) ? ratio : config.radar_size_ratio); });
+          return pos.length === 1 ? pos[0] : pos;
+      },
+      /**
+       * Generate data points
+       * @private
+       */
+      generateRadarPoints: function () {
+          var $$ = this;
+          var targets = $$.data.targets;
+          var _a = $$.getRadarSize(), width = _a[0], height = _a[1];
+          var points = $$.cache.get(cacheKey) || {};
+          var size = points._size;
+          // recalculate position only when the previous dimension has been changed
+          if (!size || (size.width !== width && size.height !== height)) {
+              targets.forEach(function (d) {
+                  points[d.id] = d.values.map(function (v, i) { return ($$.getRadarPosition(["x", "y"], i, undefined, $$.getRatio("radar", v))); });
+              });
+              points._size = { width: width, height: height };
+              $$.cache.add(cacheKey, points);
+          }
+      },
+      redrawRadar: function (durationForExit) {
+          var $$ = this;
+          var _a = $$.$el, radar = _a.radar, main = _a.main;
+          var translate = $$.getTranslate("radar");
+          // Adjust radar, circles and texts' position
+          if (translate) {
+              radar.attr("transform", translate);
+              main.select("." + CLASS.chartTexts).attr("transform", translate);
+              $$.generateRadarPoints();
+              $$.updateRadarLevel();
+              $$.updateRadarAxes();
+              $$.updateRadarShape(durationForExit);
+          }
+      },
+      generateGetRadarPoints: function () {
+          var points = this.cache.get(cacheKey);
+          return function (d, i) {
+              var point = points[d.id][i];
+              return [
+                  point,
+                  point,
+                  point,
+                  point
+              ];
+          };
+      },
+      updateRadarLevel: function () {
+          var $$ = this;
+          var config = $$.config, state = $$.state, radar = $$.$el.radar;
+          var _a = $$.getRadarSize(), width = _a[0], height = _a[1];
+          var depth = config.radar_level_depth;
+          var edge = config.axis_x_categories.length;
+          var showText = config.radar_level_text_show;
+          var radarLevels = radar.levels;
+          var levelData = getRange(0, depth);
+          var radius = config.radar_size_ratio * Math.min(width, height);
+          var levelRatio = levelData.map(function (l) { return radius * ((l + 1) / depth); });
+          var levelTextFormat = (config.radar_level_text_format || function () { }).bind($$.api);
+          // Generate points
+          var points = levelData.map(function (v) {
+              var range = levelRatio[v];
+              var pos = getRange(0, edge).map(function (i) { return ($$.getRadarPosition(["x", "y"], i, range, 1)).join(","); });
+              return pos.join(" ");
+          });
+          var level = radarLevels
+              .selectAll("." + CLASS.level)
+              .data(levelData);
+          level.exit().remove();
+          var levelEnter = level.enter().append("g")
+              .attr("class", function (d, i) { return CLASS.level + " " + CLASS.level + "-" + i; });
+          levelEnter.append("polygon")
+              .style("visibility", config.radar_level_show ? null : "hidden");
+          if (showText) {
+              if (radarLevels.select("text").empty()) {
+                  radarLevels
+                      .append("text")
+                      .attr("dx", "-.5em")
+                      .attr("dy", "-.7em")
+                      .style("text-anchor", "end")
+                      .text(function () { return levelTextFormat(0); });
+              }
+              levelEnter.append("text")
+                  .attr("dx", "-.5em")
+                  .style("text-anchor", "end")
+                  .text(function (d) { return levelTextFormat(state.current.dataMax / levelData.length * (d + 1)); });
+          }
+          levelEnter
+              .merge(level)
+              .attr("transform", function (d) { return "translate(" + (width - levelRatio[d]) + ", " + (height - levelRatio[d]) + ")"; })
+              .selectAll("polygon")
+              .attr("points", function (d) { return points[d]; });
+          // update level text position
+          if (showText) {
+              radarLevels.selectAll("text")
+                  .attr("x", function (d) { return (isUndefined(d) ? width : points[d].split(",")[0]); })
+                  .attr("y", function (d) { return (isUndefined(d) ? height : 0); });
+          }
+      },
+      updateRadarAxes: function () {
+          var $$ = this;
+          var config = $$.config, radar = $$.$el.radar;
+          var _a = $$.getRadarSize(), width = _a[0], height = _a[1];
+          var categories = config.axis_x_categories;
+          var axis = radar.axes.selectAll("g")
+              .data(categories);
+          axis.exit().remove();
+          var axisEnter = axis.enter().append("g")
+              .attr("class", function (d, i) { return CLASS.axis + "-" + i; });
+          config.radar_axis_line_show && axisEnter.append("line");
+          config.radar_axis_text_show && axisEnter.append("text");
+          axis = axisEnter.merge(axis);
+          // axis line
+          if (config.radar_axis_line_show) {
+              axis.select("line")
+                  .attr("x1", width)
+                  .attr("y1", height)
+                  .attr("x2", function (d, i) { return $$.getRadarPosition("x", i); })
+                  .attr("y2", function (d, i) { return $$.getRadarPosition("y", i); });
+          }
+          // axis text
+          if (config.radar_axis_text_show) {
+              var _b = config.radar_axis_text_position, _c = _b.x, x_1 = _c === void 0 ? 0 : _c, _d = _b.y, y_1 = _d === void 0 ? 0 : _d;
+              axis.select("text")
+                  .style("text-anchor", "middle")
+                  .attr("dy", ".5em")
+                  .call(function (selection) {
+                  selection.each(function (d) {
+                      setTextValue(select(this), String(d), [-0.6, 1.2]);
+                  });
+              })
+                  .datum(function (d, i) { return ({ index: i }); })
+                  .attr("transform", function (d) {
+                  if (isUndefined(this.width)) {
+                      // cache evaluated axis text width
+                      this.width = this.getBoundingClientRect().width / 2;
+                  }
+                  var posX = $$.getRadarPosition("x", d.index, undefined, 1);
+                  var posY = Math.round($$.getRadarPosition("y", d.index, undefined, 1));
+                  if (posX > width) {
+                      posX += this.width + x_1;
+                  }
+                  else if (Math.round(posX) < width) {
+                      posX -= this.width + x_1;
+                  }
+                  if (posY > height) {
+                      // update vertical centered edge axis text dy position
+                      if (posY / 2 === height && this.firstChild.tagName === "tspan") {
+                          this.firstChild.setAttribute("dy", "0em");
+                      }
+                      posY += y_1;
+                  }
+                  else if (posY < height) {
+                      posY -= y_1;
+                  }
+                  return "translate(" + posX + " " + posY + ")";
+              });
+          }
+          $$.bindEvent();
+      },
+      bindEvent: function () {
+          var $$ = this;
+          var config = $$.config, state = $$.state, _a = $$.$el, radar = _a.radar, svg = _a.svg;
+          var focusOnly = config.point_focus_only;
+          var inputType = state.inputType, transiting = state.transiting;
+          if (config.interaction_enabled) {
+              var isMouse_1 = inputType === "mouse";
+              var getIndex_1 = function (event) {
+                  var target = event.target;
+                  // in case of multilined axis text
+                  if (/tspan/i.test(target.tagName)) {
+                      target = target.parentNode;
+                  }
+                  var d = select(target).datum();
+                  return d && Object.keys(d).length === 1 ? d.index : undefined;
+              };
+              var hide = function (event) {
+                  var index = getIndex_1(event);
+                  var noIndex = isUndefined(index);
+                  if (isMouse_1 || noIndex) {
+                      $$.hideTooltip();
+                      focusOnly ?
+                          $$.hideCircleFocus() :
+                          $$.unexpandCircles();
+                      if (isMouse_1) {
+                          $$.setOverOut(false, index);
+                      }
+                      else if (noIndex) {
+                          $$.callOverOutForTouch();
+                      }
+                  }
+              };
+              radar.axes.selectAll("text")
+                  .on(isMouse_1 ? "mouseover " : "touchstart", function (event) {
+                  if (transiting) { // skip while transiting
+                      return;
+                  }
+                  state.event = event;
+                  var index = getIndex_1(event);
+                  $$.selectRectForSingle(svg.node(), null, index);
+                  isMouse_1 ? $$.setOverOut(true, index) : $$.callOverOutForTouch(index);
+              })
+                  .on("mouseout", isMouse_1 ? hide : null);
+              if (!isMouse_1) {
+                  svg.on("touchstart", hide);
+              }
+          }
+      },
+      updateRadarShape: function (durationForExit) {
+          var $$ = this;
+          var targets = $$.data.targets.filter(function (d) { return $$.isRadarType(d); });
+          var points = $$.cache.get(cacheKey);
+          var areas = $$.$el.radar.shapes
+              .selectAll("polygon")
+              .data(targets);
+          var areasEnter = areas.enter().append("g")
+              .attr("class", $$.getChartClass("Radar"));
+          areas.exit().transition()
+              .duration(durationForExit)
+              .remove();
+          areasEnter
+              .append("polygon")
+              .merge(areas)
+              .style("fill", $$.color)
+              .style("stroke", $$.color)
+              .attr("points", function (d) { return points[d.id].join(" "); });
+          $$.updateTargetForCircle(targets, areasEnter);
+      },
+      /**
+       * Get data point x coordinate
+       * @param {object} d Data object
+       * @returns {number}
+       * @private
+       */
+      radarCircleX: function (d) {
+          return this.cache.get(cacheKey)[d.id][d.index][0];
+      },
+      /**
+       * Get data point y coordinate
+       * @param {object} d Data object
+       * @returns {number}
+       * @private
+       */
+      radarCircleY: function (d) {
+          return this.cache.get(cacheKey)[d.id][d.index][1];
+      }
+  };
+
+  /**
+   * Copyright (c) 2017 ~ present NAVER Corp.
+   * billboard.js project is licensed under the MIT license
+   */
+  /**
+   * point config options
+   */
+  var optPoint = {
+      /**
+       * Set point options
+       * @name point
+       * @memberof Options
+       * @type {object}
+       * @property {object} point Point object
+       * @property {boolean} [point.show=true] Whether to show each point in line.
+       * @property {number|Function} [point.r=2.5] The radius size of each point.
+       *  - **NOTE:** Disabled for 'bubble' type
+       * @property {boolean} [point.focus.expand.enabled=true] Whether to expand each point on focus.
+       * @property {number} [point.focus.expand.r=point.r*1.75] The radius size of each point on focus.
+       *  - **NOTE:** For 'bubble' type, the default is `bubbleSize*1.15`
+       * @property {boolean} [point.focus.only=false] Show point only when is focused.
+       * @property {number|null} [point.opacity=undefined] Set point opacity value.
+       * - **NOTE:**
+       *	- `null` will make to not set inline 'opacity' css prop.
+       *	- when no value(or undefined) is set, it defaults to set opacity value according its chart types.
+       * @property {number} [point.sensitivity=10] The senstivity value for interaction boundary.
+       * @property {number} [point.select.r=point.r*4] The radius size of each point on selected.
+       * @property {string} [point.type="circle"] The type of point to be drawn
+       * - **NOTE:**
+       *   - If chart has 'bubble' type, only circle can be used.
+       *   - For IE, non circle point expansions are not supported due to lack of transform support.
+       * - **Available Values:**
+       *   - circle
+       *   - rectangle
+       * @property {Array} [point.pattern=[]] The type of point or svg shape as string, to be drawn for each line
+       * - **NOTE:**
+       *   - This is an `experimental` feature and can have some unexpected behaviors.
+       *   - If chart has 'bubble' type, only circle can be used.
+       *   - For IE, non circle point expansions are not supported due to lack of transform support.
+       * - **Available Values:**
+       *   - circle
+       *   - rectangle
+       *   - svg shape tag interpreted as string<br>
+       *     (ex. `<polygon points='2.5 0 0 5 5 5'></polygon>`)
+       * @see [Demo: point type](https://naver.github.io/billboard.js/demo/#Point.RectanglePoints)
+       * @see [Demo: point focus only](https://naver.github.io/billboard.js/demo/#Point.FocusOnly)
+       * @example
+       *  point: {
+       *      show: false,
+       *      r: 5,
+       *
+       *      // or customize the radius
+       *      r: function(d) {
+       *          ...
+       *          return r;
+       *      },
+       *
+       *      focus: {
+       *          expand: {
+       *              enabled: true,
+       *              r: 1
+       *          },
+       *          only: true
+       *      },
+       *
+       *      // do not set inline 'opacity' css prop setting
+       *      opacity: null,
+       *
+       *      // set every data point's opacity value
+       *      opacity: 0.7,
+       *
+       *      select: {
+       *          r: 3
+       *      },
+       *
+       *      // having lower value, means how closer to be for interaction
+       *      sensitivity: 3,
+       *
+       *      // valid values are "circle" or "rectangle"
+       *      type: "rectangle",
+       *
+       *      // or indicate as pattern
+       *      pattern: [
+       *        "circle",
+       *        "rectangle",
+       *        "<polygon points='0 6 4 0 -4 0'></polygon>"
+       *     ],
+       *  }
+       */
+      point_show: true,
+      point_r: 2.5,
+      point_sensitivity: 10,
+      point_focus_expand_enabled: true,
+      point_focus_expand_r: undefined,
+      point_focus_only: false,
+      point_opacity: undefined,
+      point_pattern: [],
+      point_select_r: undefined,
+      point_type: "circle"
+  };
+
   /**
    * Copyright (c) 2017 ~ present NAVER Corp.
    * billboard.js project is licensed under the MIT license
@@ -21023,6 +23109,82 @@
    * billboard.js project is licensed under the MIT license
    */
   /**
+   * x Axis config options
+   */
+  var optRadar = {
+      /**
+       * Set radar options
+       * - **NOTE:**
+       *  > When x tick text contains `\n`, it's used as line break.
+       * @name radar
+       * @memberof Options
+       * @type {object}
+       * @property {object} radar Radar object
+       * @property {number} [radar.axis.max=undefined] The max value of axis. If not given, it'll take the max value from the given data.
+       * @property {boolean} [radar.axis.line.show=true] Show or hide axis line.
+       * @property {number} [radar.axis.text.position.x=0] x coordinate position, relative the original.
+       * @property {number} [radar.axis.text.position.y=0] y coordinate position, relative the original.
+       * @property {boolean} [radar.axis.text.show=true] Show or hide axis text.
+       * @property {boolean} [radar.direction.clockwise=false] Set the direction to be drawn.
+       * @property {number} [radar.level.depth=3] Set the level depth.
+       * @property {boolean} [radar.level.show=true] Show or hide level.
+       * @property {Function} [radar.level.text.format] Set format function for the level value.<br>- Default value: `(x) => x % 1 === 0 ? x : x.toFixed(2)`
+       * @property {boolean} [radar.level.text.show=true] Show or hide level text.
+       * @property {number} [radar.size.ratio=0.87] Set size ratio.
+       * @see [Demo](https://naver.github.io/billboard.js/demo/#Chart.RadarChart)
+       * @see [Demo: radar axis](https://naver.github.io/billboard.js/demo/#RadarChartOptions.RadarAxis)
+       * @see [Demo: radar level](https://naver.github.io/billboard.js/demo/#RadarChartOptions.RadarLevel)
+       * @see [Demo: radar size](https://naver.github.io/billboard.js/demo/#RadarChartOptions.RadarSize)
+       * @see [Demo: radar axis multiline](https://naver.github.io/billboard.js/demo/#RadarChartOptions.RadarAxisMultiline)
+       * @example
+       *  radar: {
+       *      axis: {
+       *          max: 50,
+       *          line: {
+       *              show: false
+       *          },
+       *          text: {
+       *              position: {
+       *              	x: 0,
+       *              	y: 0
+       *              },
+       *              show: false
+       *          }
+       *      },
+       *      direction: {
+       *          clockwise: true
+       *      },
+       *      level: {
+       *          show: false,
+       *          text: {
+       *              format: function(x) {
+       *                  return x + "%";
+       *              },
+       *              show: true
+       *          }
+       *      },
+       *      size: {
+       *          ratio: 0.7
+       *      }
+       *  }
+       */
+      radar_axis_max: undefined,
+      radar_axis_line_show: true,
+      radar_axis_text_show: true,
+      radar_axis_text_position: {},
+      radar_level_depth: 3,
+      radar_level_show: true,
+      radar_level_text_format: function (x) { return (x % 1 === 0 ? x : x.toFixed(2)); },
+      radar_level_text_show: true,
+      radar_size_ratio: 0.87,
+      radar_direction_clockwise: false
+  };
+
+  /**
+   * Copyright (c) 2017 ~ present NAVER Corp.
+   * billboard.js project is licensed under the MIT license
+   */
+  /**
    * Extend Axis
    * @param {Array} module Module to be extended
    * @param {Array} option Option object to be extended
@@ -21033,6 +23195,17 @@
       extend(Chart.prototype, api);
       Options.setOptions(options.concat(option || []));
   }
+  /**
+   * Extend Arc type modules
+   * @param {Array} module Module to be extended
+   * @param {Array} option Option object to be extended
+   * @private
+   */
+  function extendArc(module, option) {
+      extend(ChartInternal.prototype, [shapeArc].concat(module || []));
+      Options.setOptions(option);
+  }
+  var radar = function () { return (extendArc([shapePoint, shapeRadar], [optPoint, optRadar]), (radar = function () { return TYPE.RADAR; })()); };
   // Axis based types
   var bar = function () { return (extendAxis([shapeBar], optBar), (bar = function () { return TYPE.BAR; })()); };
 
@@ -21621,23 +23794,38 @@
       plugin: {}
   };
 
-  const DATA = [
-    {"Date":"2016-01","km":"91.562"},{"Date":"2016-02","km":"74.5"},{"Date":"2016-03","km":"56.512"},{"Date":"2016-04","km":"42.38"},{"Date":"2016-05","km":"71.722"},{"Date":"2016-06","km":"20.063"},{"Date":"2016-07","km":"51.711"},{"Date":"2016-08","km":"68.516"},{"Date":"2016-09","km":"88.512"},{"Date":"2016-10","km":"79.385"},{"Date":"2016-11","km":"76.631"},{"Date":"2016-12","km":"71.563"}
-  ];
+  const data2016 = [{"Date":"2016-01","km":"91.562"},{"Date":"2016-02","km":"74.5"},{"Date":"2016-03","km":"56.512"},{"Date":"2016-04","km":"42.38"},{"Date":"2016-05","km":"71.722"},{"Date":"2016-06","km":"20.063"},{"Date":"2016-07","km":"51.711"},{"Date":"2016-08","km":"68.516"},{"Date":"2016-09","km":"88.512"},{"Date":"2016-10","km":"79.385"},{"Date":"2016-11","km":"76.631"},{"Date":"2016-12","km":"71.563"}];
+  const data2017 = [{"Date":"2017-01","km":"48.33"},{"Date":"2017-02","km":"63.372"},{"Date":"2017-03","km":"76.355"},{"Date":"2017-04","km":"66.331"},{"Date":"2017-05","km":"75.435"},{"Date":"2017-06","km":"67.878"},{"Date":"2017-07","km":"206.896"},{"Date":"2017-08","km":"78.414"},{"Date":"2017-09","km":"167.397"},{"Date":"2017-10","km":"87.894"},{"Date":"2017-11","km":"109.453"},{"Date":"2017-12","km":"90.157"}];
+  const data2018 = [{"Date":"2018-01","km":"78.356"},{"Date":"2018-02","km":"101.95"},{"Date":"2018-03","km":"89.559"},{"Date":"2018-04","km":"118.374"},{"Date":"2018-05","km":"76.182"},{"Date":"2018-06","km":"76.056"},{"Date":"2018-07","km":"58.052"},{"Date":"2018-08","km":"68.793"},{"Date":"2018-09","km":"60.929"},{"Date":"2018-10","km":"78.418"},{"Date":"2018-11","km":"71.083"},{"Date":"2018-12","km":"64.659"}];
+  const data2019 = [{"Date":"2019-01","km":"50.391"},{"Date":"2019-02","km":"51.624"},{"Date":"2019-03","km":"70.191"},{"Date":"2019-04","km":"72.563"},{"Date":"2019-05","km":"79.482"},{"Date":"2019-06","km":"68.996"},{"Date":"2019-07","km":"89.025"},{"Date":"2019-08","km":"76.002"},{"Date":"2019-09","km":"127.599"},{"Date":"2019-10","km":"63.396"},{"Date":"2019-11","km":"70.264"},{"Date":"2019-12","km":"61.702"}];
+  const data2020 = [{"Date":"2020-01","km":"52.656"},{"Date":"2020-02","km":"74.537"},{"Date":"2020-03","km":"39.465"},{"Date":"2020-04","km":"19.702"},{"Date":"2020-05","km":"47.393"},{"Date":"2020-06","km":"67.765"},{"Date":"2020-07","km":"82.422"},{"Date":"2020-08","km":"75.744"},{"Date":"2020-09","km":"56.517"},{"Date":"2020-10","km":"27.594"},{"Date":"2020-11","km":"40.112"},{"Date":"2020-12","km":"48.486"}];
 
-
-
+  //Stacked
   bb.generate({
     data: {
       json: {
-        km: DATA.map(({ km }) => km),
+        data2016: data2016.map(({ km }) => km),
+        data2017: data2017.map(({ km }) => km),
+        data2018: data2018.map(({ km }) => km),
+        data2019: data2019.map(({ km }) => km),
+        data2020: data2020.map(({ km }) => km),
       },
       type: bar(),
+      groups: [
+        [
+          "data2016",
+          "data2017",
+          "data2018",
+          "data2019",
+          "data2020"
+        ]
+      ],
+      order: "null"
     },
     axis: {
       x: {
         type: 'category',
-        categories: DATA.map(({ Date }) => Date),
+        categories: ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Décembre"],
         tick: {
           fit: true,
           multiline: false,
@@ -21648,6 +23836,108 @@
       }
     },
     bindto: '#graph'
+  });
+
+
+  // let chart = bb.generate({
+  //   data: {
+  //     json: {
+  //       // data2016: data2016.map(({ km }) => km),
+  //       // data2017: data2017.map(({ km }) => km),
+  //       // data2018: data2018.map(({ km }) => km),
+  //       // data2019: data2019.map(({ km }) => km),
+  //       // data2020: data2020.map(({ km }) => km),
+  //     },
+  //     type: radar(),
+  //     labels: false
+  //   },
+  //   radar: {
+  //     axis: {
+  //       max: 200
+  //     },
+  //     level: {
+  //       depth: 4
+  //     },
+  //     direction: {
+  //       clockwise: true
+  //     }
+  //   },
+  //   axis: {
+  //     x: {
+  //       type: 'category',
+  //       categories: ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Décembre"],
+  //       tick: {
+  //         fit: true,
+  //         multiline: false,
+  //         autorotate: true,
+  //         rotate: -45,
+  //         culling: false
+  //       },
+  //     }
+  //   },
+  //   bindto: "#radarChart"
+  // });
+
+  let chart = bb.generate({
+    data: {    x: "x",
+    columns: [
+        ["x","Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Décembre"],
+        ["data2016",91.562,74.5,56.512,42.38,71.722,20.063,51.711,68.516,88.512,79.385,76.631,71.563],
+
+    ],
+      type: radar(),
+      labels: false
+    },
+    radar: {
+      axis: {
+        max: 200
+      },
+      level: {
+        depth: 4
+      },
+      direction: {
+        clockwise: true
+      }
+    },
+    axis: {
+      x: {
+        type: 'category',
+        // categories: ["Janvier","Fevrier","Mars","Avril","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Décembre"],
+        tick: {
+          fit: true,
+          multiline: false,
+          autorotate: true,
+          rotate: -45,
+          culling: false
+        },
+      }
+    },
+    bindto: "#radarChart"
+  });
+
+  document.getElementById('btn-2016');
+
+  const bouton2017 = document.getElementById('btn-2017');
+  let show2017 = false;
+
+  bouton2017.addEventListener('click', () => {
+    if (show2017 == false) {
+      console.log("false");
+      chart.load({
+        columns: [["data2017", 48.33,63.372,76.355,66.331,75.435,67.878,206.896,78.414,167.397,87.894,109.453,90.157]]
+      });
+      show2017 = true;
+    } else {
+      console.log("true");
+      chart.unload({
+        ids: "data2017",
+        done: function() {
+           // called after the unloaded
+        }
+      });
+      show2017 = false;
+    }
+
   });
 
 }());
