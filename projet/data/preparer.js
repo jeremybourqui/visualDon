@@ -11,5 +11,3 @@ csv()
      * ]
      */ 
 })
-
-// csvtojson data.csv > data.json
