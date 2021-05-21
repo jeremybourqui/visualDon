@@ -44,6 +44,8 @@ button{
 #button{
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+
 }
 
 #btn-2016{
@@ -73,6 +75,7 @@ button{
 footer {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .bb-text {
