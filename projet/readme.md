@@ -1,5 +1,13 @@
 # Projet
+## Liens
+Site publié : http://podometre20162020.surge.sh/
 
+Code : https://github.com/jeremybourqui/visualDon/tree/master/projet/bb-graph
+
+## Données
+Les données ont étés extraites du podomètre de mon smartphone, grace à une application tierce, au format csv, que j'ai par la suite transfomé en json.
+
+# Journal
 ## 16 Avril
 pas d'idée precise encore
 
